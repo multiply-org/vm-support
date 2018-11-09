@@ -3,7 +3,6 @@
 from setuptools import setup
 
 requirements = [
-    'git',
     'pytest',
     'pyyaml',
 ]

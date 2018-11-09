@@ -9,7 +9,7 @@ requirements = [
 ]
 
 __version__ = None
-with open('multiply_vm_support/version.py') as f:
+with open('vm_support/version.py') as f:
     exec(f.read())
 
 setup(name='vm-support',

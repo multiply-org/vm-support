@@ -1,0 +1,26 @@
+default_software_dir:
+repo_list:
+  - repo:
+    name: MULTIPLY Core
+    path_on_github: https://github.com/multiply-org/multiply-core.git
+    branch: master
+  - repo:
+    name: MULTIPLY Data Access
+    path_on_github: https://github.com/multiply-org/data-access.git
+    branch: master
+  - repo:
+    name: SIAC
+    path_on_github: https://github.com/multiply-org/atmospheric_correction.git
+    branch: master
+  - repo:
+    name: MULTIPLY Prior Engine
+    path_on_github: https://github.com/multiply-org/prior-engine.git
+    branch: master
+  - repo:
+    name: MULTIPLY Inference Engine
+    path_on_github: https://github.com/multiply-org/inference-engine.git
+    branch: master
+  - repo:
+    name: KaFKA
+    path_on_github: https://github.com/multiply-org/KaFKA-InferenceEngine.git
+    branch: master

@@ -1,0 +1,32 @@
+default_software_dir: './test/software_dir/'
+repo_list:
+  - repo:
+    name: MULTIPLY Core
+    path_on_disk: './test/software_dir/multiply-core'
+    path_on_github: https://github.com/multiply-org/multiply-core.git
+    branch: master
+    version: v0.4
+  - repo:
+    name: MULTIPLY Data Access
+    path_on_disk: './test/software_dir/data-access'
+    path_on_github: https://github.com/multiply-org/data-access.git
+    branch: master
+    version: v0.4
+  - repo:
+    name: SIAC
+    path_on_disk: './test/software_dir/atmospheric_correction'
+    path_on_github: https://github.com/multiply-org/atmospheric_correction.git
+    branch: master
+    version: v2
+  - repo:
+    name: MULTIPLY Prior Engine
+    path_on_disk:
+    path_on_github: https://github.com/multiply-org/prior-engine.git
+    branch: master
+    version: v0.4.1
+  - repo:
+    name: MULTIPLY Inference Engine
+    path_on_disk:
+    path_on_github: https://github.com/multiply-org/inference-engine.git
+    branch: master
+    version: v0.4

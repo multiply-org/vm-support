@@ -3,27 +3,19 @@
 from setuptools import setup
 
 requirements = [
-    'gdal',
-    'numpy',
-    'osr',
+    'git',
     'pytest',
-    'shapely',
-    'scipy'
+    'pyyaml',
 ]
 
 __version__ = None
-with open('multiply_core/version.py') as f:
+with open('multiply_vm_support/version.py') as f:
     exec(f.read())
 
-setup(name='multiply-core',
+setup(name='vm-support',
       version=__version__,
-      description='MULTIPLY Core',
+      description='Support for MULTIPLY VM',
       author='MULTIPLY Team',
-      packages=['multiply_core', 'multiply_core.util', 'multiply_core.observations'],
-      entry_points={
-          'observations_creators': [
-              's2_observation_creator = multiply_core.observations:s2_observations.S2ObservationsCreator',
-          ],
-      },
+      packages=['vm_support'],
       install_requires=requirements
-      )
+)

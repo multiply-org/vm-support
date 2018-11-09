@@ -1,4 +1,6 @@
 import getpass
+import os
+import shutil
 import yaml
 
 from pathlib import Path
@@ -8,14 +10,17 @@ MULTIPLY_DIR_NAME = '.multiply'
 DATA_STORES_FILE_NAME = 'data_stores.yml'
 
 
-def get_working_dir() -> str:
+def get_working_dir(dir_name: str) -> str:
     username = getpass.getuser()
-    return '/Data/{}/'.format(username)
+    working_dir = '/Data/{}/{}'.format(username, dir_name)
+    shutil.rmtree(working_dir)
+    os.makedirs(working_dir)
+    return working_dir
 
 
 def create_config_file(temp_dir: str, roi: str, start_time: str, end_time: str, time_interval: str,
                        priors_directory: str, parameter_list: Optional[List[str]] =
-                       {'n', 'cab', 'car', 'cb', 'cw', 'cdm', 'lai', 'ala', 'bsoil', 'psoil'}):
+                       {'n', 'cab', 'car', 'cb', 'cw', 'cdm', 'lai', 'ala', 'bsoil', 'psoil'}) -> str:
     config = {'General': {}}
     config['General']['roi'] = roi
     config['General']['start_time'] = start_time
@@ -32,6 +37,7 @@ def create_config_file(temp_dir: str, roi: str, start_time: str, end_time: str, 
     config_file_name = '{}/config.yaml'.format(temp_dir)
     with open(config_file_name, 'w') as config_file:
         yaml.dump(config, config_file, default_flow_style=False)
+    return config_file_name
 
 
 def set_earth_data_authentication(username: str, password: str):

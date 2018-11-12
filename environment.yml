@@ -1,0 +1,14 @@
+name: multiply-vms-dev
+
+channels:
+  - conda-forge
+  - defaults
+
+dependencies:
+  - python =3.6*
+  #
+  # runtime dependencies
+  #
+  - gitpython = 2.1.11
+  - pyyaml = 3.12
+  - pytest =3.8.0

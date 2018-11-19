@@ -1,3 +1,5 @@
+__author__ = 'Tonio Fincke (Brockmann Consult GmbH)'
+
 import getpass
 import os
 import shutil
@@ -41,9 +43,13 @@ def create_config_file(temp_dir: str, roi: str, start_time: str, end_time: str, 
     return config_file_name
 
 
-def set_earth_data_authentication(username: str, password: str):
+def _get_data_stores_file() -> str:
     home_dir = str(Path.home())
-    data_stores_file = '{0}/{1}/{2}'.format(home_dir, MULTIPLY_DIR_NAME, DATA_STORES_FILE_NAME)
+    return '{0}/{1}/{2}'.format(home_dir, MULTIPLY_DIR_NAME, DATA_STORES_FILE_NAME)
+
+
+def set_earth_data_authentication(username: str, password: str):
+    data_stores_file = _get_data_stores_file()
     _set_earth_data_authentication_to_file(username, password, data_stores_file)
 
 

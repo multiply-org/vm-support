@@ -3,6 +3,7 @@ __author__ = 'Tonio Fincke (Brockmann Consult GmbH)'
 import getpass
 import os
 import shutil
+import stat
 import yaml
 
 from pathlib import Path
@@ -10,6 +11,8 @@ from typing import List, Optional
 
 MULTIPLY_DIR_NAME = '.multiply'
 DATA_STORES_FILE_NAME = 'data_stores.yml'
+ALL_PERMISSIONS = stat.S_IRUSR & stat.S_IWUSR & stat.S_IXUSR & stat.S_IRGRP & stat.S_IWGRP & stat.S_IXGRP & \
+                  stat.S_IROTH & stat.S_IWOTH & stat.S_IXOTH
 
 
 def get_working_dir(dir_name: str) -> str:
@@ -63,3 +66,8 @@ def _set_earth_data_authentication_to_file(username: str, password: str, data_st
     stream.close()
     with open(data_stores_file, 'w') as file:
         yaml.dump(data_store_lists, file, default_flow_style=False)
+
+
+def set_permissions(path: str):
+    if os.path.exists(path):
+        os.chmod(path, ALL_PERMISSIONS)

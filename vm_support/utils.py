@@ -13,7 +13,8 @@ DATA_STORES_FILE_NAME = 'data_stores.yml'
 def get_working_dir(dir_name: str) -> str:
     username = getpass.getuser()
     working_dir = '/Data/{}/{}'.format(username, dir_name)
-    shutil.rmtree(working_dir)
+    if os.path.exists(working_dir):
+        shutil.rmtree(working_dir)
     os.makedirs(working_dir)
     return working_dir
 

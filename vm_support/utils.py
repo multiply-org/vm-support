@@ -1,13 +1,15 @@
 __author__ = 'Tonio Fincke (Brockmann Consult GmbH)'
 
 import getpass
+import glob
 import os
 import shutil
 import stat
 import yaml
 
+from multiply_core.util import FileRef
 from pathlib import Path
-from typing import List, Optional
+from typing import List, Optional, Union
 
 MULTIPLY_DIR_NAME = '.multiply'
 DATA_STORES_FILE_NAME = 'data_stores.yml'
@@ -68,6 +70,13 @@ def _set_earth_data_authentication_to_file(username: str, password: str, data_st
         yaml.dump(data_store_lists, file, default_flow_style=False)
 
 
-def set_permissions(path: str):
-    if os.path.exists(path):
-        os.chmod(path, ALL_PERMISSIONS)
+def set_permissions(file_refs: List[Union[str, FileRef]]):
+    for file_ref in file_refs:
+        if type(file_ref) == FileRef:
+            file_ref = file_ref.url
+        globbed_files = glob.glob('{}/**'.format(file_ref), recursive=True)
+        for item in globbed_files:
+            full_path_to_item = os.path.join(file_ref, item)
+            stat = os.stat(full_path_to_item)
+            if stat.st_mode & ALL_PERMISSIONS != ALL_PERMISSIONS and stat.st_uid == os.getuid():
+                os.chmod(full_path_to_item, ALL_PERMISSIONS)

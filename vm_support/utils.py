@@ -74,10 +74,15 @@ def set_permissions(file_refs: List[Union[str, FileRef]]):
     for file_ref in file_refs:
         if type(file_ref) == FileRef:
             file_ref = file_ref.url
-        print(file_ref)
-        globbed_files = glob.glob('{}/**'.format(file_ref), recursive=True)
-        for item in globbed_files:
-            full_path_to_item = os.path.join(file_ref, item)
-            stat = os.stat(full_path_to_item)
-            if stat.st_mode & ALL_PERMISSIONS != ALL_PERMISSIONS and stat.st_uid == os.getuid():
-                os.chmod(full_path_to_item, ALL_PERMISSIONS)
+        if not os.path.isdir(file_ref):
+            _set_permissions_for_file(file_ref)
+        else:
+            globbed_files = glob.glob('{}/**'.format(file_ref), recursive=True)
+            for item in globbed_files:
+                _set_permissions_for_file(item)
+
+
+def _set_permissions_for_file(path: str):
+    stat = os.stat(path)
+    if stat.st_mode & ALL_PERMISSIONS != ALL_PERMISSIONS and stat.st_uid == os.getuid():
+        os.chmod(path, ALL_PERMISSIONS)

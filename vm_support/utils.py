@@ -74,6 +74,7 @@ def set_permissions(file_refs: List[Union[str, FileRef]]):
     for file_ref in file_refs:
         if type(file_ref) == FileRef:
             file_ref = file_ref.url
+        print(file_ref)
         globbed_files = glob.glob('{}/**'.format(file_ref), recursive=True)
         for item in globbed_files:
             full_path_to_item = os.path.join(file_ref, item)

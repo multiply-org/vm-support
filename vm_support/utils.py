@@ -62,7 +62,7 @@ def _set_earth_data_authentication_to_file(username: str, password: str, data_st
     stream = open(data_stores_file, 'r')
     data_store_lists = yaml.load(stream)
     for data_store_entry in data_store_lists:
-        if data_store_entry['DataStore']['Id'] == 'modis_mcd43a1':
+        if data_store_entry['DataStore']['FileSystem']['type'] == 'LpDaacFileSystem':
             data_store_entry['DataStore']['FileSystem']['parameters']['username'] = username
             data_store_entry['DataStore']['FileSystem']['parameters']['password'] = password
     stream.close()
@@ -74,12 +74,12 @@ def set_permissions(file_refs: List[Union[str, FileRef]]):
     for file_ref in file_refs:
         if type(file_ref) == FileRef:
             file_ref = file_ref.url
-        if not os.path.isdir(file_ref):
-            _set_permissions_for_file(file_ref)
-        else:
+        if os.path.isdir(file_ref):
             globbed_files = glob.glob('{}/**'.format(file_ref), recursive=True)
             for item in globbed_files:
                 _set_permissions_for_file(item)
+        else:
+            _set_permissions_for_file(file_ref)
 
 
 def _set_permissions_for_file(path: str):

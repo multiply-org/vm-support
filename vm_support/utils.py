@@ -3,6 +3,7 @@ __author__ = 'Tonio Fincke (Brockmann Consult GmbH)'
 import getpass
 import glob
 import os
+import pkg_resources
 import shutil
 import stat
 import yaml
@@ -15,6 +16,7 @@ MULTIPLY_DIR_NAME = '.multiply'
 DATA_STORES_FILE_NAME = 'data_stores.yml'
 ALL_PERMISSIONS = stat.S_IRUSR & stat.S_IWUSR & stat.S_IXUSR & stat.S_IRGRP & stat.S_IWGRP & stat.S_IXGRP & \
                   stat.S_IROTH & stat.S_IWOTH & stat.S_IXOTH
+PATH_TO_VM_DATA_STORES_FILE = pkg_resources.resource_filename(__name__, 'vm_data_stores.yml')
 
 
 def get_working_dir(dir_name: str) -> str:
@@ -86,3 +88,7 @@ def _set_permissions_for_file(path: str):
     stat = os.stat(path)
     if stat.st_mode & ALL_PERMISSIONS != ALL_PERMISSIONS and stat.st_uid == os.getuid():
         os.chmod(path, ALL_PERMISSIONS)
+
+
+def set_up_data_stores():
+    shutil.copyfile(PATH_TO_VM_DATA_STORES_FILE, _get_data_stores_file())

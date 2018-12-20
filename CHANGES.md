@@ -1,3 +1,8 @@
+## Version 0.1.3
+
+### Fixes
+* Fixed setting up of data stores
+
 ## Version 0.1.2
 
 ### Fixes

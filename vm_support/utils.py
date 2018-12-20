@@ -91,4 +91,17 @@ def _set_permissions_for_file(path: str):
 
 
 def set_up_data_stores():
-    shutil.copyfile(PATH_TO_VM_DATA_STORES_FILE, _get_data_stores_file())
+    data_stores_file = _get_data_stores_file()
+    shutil.copyfile(PATH_TO_VM_DATA_STORES_FILE, data_stores_file)
+    username = getpass.getuser()
+    stream = open(data_stores_file, 'r')
+    data_store_lists = yaml.load(stream)
+    for data_store_entry in data_store_lists:
+        if 'temp_dir' in data_store_entry['DataStore']['FileSystem']['parameters']:
+            data_store_entry['DataStore']['FileSystem']['parameters']['temp_dir'].replace('{user}', username)
+        if 'path_to_json_file' in data_store_entry['DataStore']['MetaInfoProvider']['parameters']:
+            data_store_entry['DataStore']['MetaInfoProvider']['parameters']['path_to_json_file'].\
+                replace('{user}', username)
+    stream.close()
+    with open(data_stores_file, 'w') as file:
+        yaml.dump(data_store_lists, file, default_flow_style=False)

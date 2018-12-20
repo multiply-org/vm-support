@@ -3,25 +3,25 @@
       parameters:
         path: /Data/archive/
         pattern: '/dt/'
-        temp_dir: /home/user/.multiply/temp/aws_s2/
+        temp_dir: /home/{user}/.multiply/temp/aws_s2/
       type: AwsS2FileSystem
     Id: aws_s2
     MetaInfoProvider:
       parameters:
-        path_to_json_file: /home/user/.multiply/aws_s2_store.json
+        path_to_json_file: /home/{user}/.multiply/aws_s2_store.json
       type: AwsS2MetaInfoProvider
 - DataStore:
     FileSystem:
       parameters:
         path: /Data/archive/
         pattern: /dt/yy/
-        temp_dir: /home/user/.multiply/temp/cams/
+        temp_dir: /home/{user}/.multiply/temp/cams/
         url: http://www2.geog.ucl.ac.uk/~ucfafyi/cams/
       type: HttpFileSystem
     Id: cams
     MetaInfoProvider:
       parameters:
-        path_to_json_file: /home/user/.multiply/cams_store.json
+        path_to_json_file: /home/{user}/.multiply/cams_store.json
         supported_data_types: CAMS
         url: http://www2.geog.ucl.ac.uk/~ucfafyi/cams/
       type: HttpMetaInfoProvider
@@ -30,13 +30,13 @@
       parameters:
         path: /Data/archive/
         pattern: /dt/yy/
-        temp_dir: /home/user/.multiply/temp/cams_tiff/
+        temp_dir: /home/{user}/.multiply/temp/cams_tiff/
         url: http://www2.geog.ucl.ac.uk/~ucfafyi/cams/
       type: HttpFileSystem
     Id: cams_tiff
     MetaInfoProvider:
       parameters:
-        path_to_json_file: /home/user/.multiply/cams_tiff_store.json
+        path_to_json_file: /home/{user}/.multiply/cams_tiff_store.json
         supported_data_types: CAMS_TIFF
         url: http://www2.geog.ucl.ac.uk/~ucfafyi/cams/
       type: HttpMetaInfoProvider
@@ -45,13 +45,13 @@
       parameters:
         path: /Data/archive/emus/
         pattern: /dt/
-        temp_dir: /home/user/.multiply/temp/emus/
+        temp_dir: /home/{user}/.multiply/temp/emus/
         url: http://www2.geog.ucl.ac.uk/~ucfafyi/emus/
       type: HttpFileSystem
     Id: emulators
     MetaInfoProvider:
       parameters:
-        path_to_json_file: /home/user/.multiply/emus_store.json
+        path_to_json_file: /home/{user}/.multiply/emus_store.json
         supported_data_types: ISO_MSI_A_EMU,ISO_MSI_B_EMU
         url: http://www2.geog.ucl.ac.uk/~ucfafyi/emus/
       type: HttpMetaInfoProvider
@@ -60,13 +60,13 @@
       parameters:
         path: /Data/archive/emus/
         pattern: /dt/
-        temp_dir: /home/user/.multiply/temp/emus/
+        temp_dir: /home/{user}/.multiply/temp/emus/
         url: http://www2.geog.ucl.ac.uk/~ucfafyi/emus/
       type: HttpFileSystem
     Id: wv_emulator
     MetaInfoProvider:
       parameters:
-        path_to_json_file: /home/user/.multiply/emus/wv_emu_store.json
+        path_to_json_file: /home/{user}/.multiply/emus/wv_emu_store.json
         supported_data_types: WV_EMU
         url: http://www2.geog.ucl.ac.uk/~ucfafyi/emus/old_emus/
       type: HttpMetaInfoProvider
@@ -78,7 +78,7 @@
         path: /Data/archive/DEM/
         path_to_vrt_file: /Data/archive/DEM/aster_dem.vrt
         pattern: /dt/
-        temp_dir: /home/user/.multiply/temp/aster/
+        temp_dir: /home/{user}/.multiply/temp/aster/
         url: http://www2.geog.ucl.ac.uk/~ucfafyi/eles/
       type: VrtFileSystem
     Id: aster_dem
@@ -86,7 +86,7 @@
       parameters:
         accessed_meta_info_provider: HttpMetaInfoProvider
         encapsulated_data_type: ASTER
-        path_to_json_file: /home/user/.multiply/aster_dem_store.json
+        path_to_json_file: /home/{user}/.multiply/aster_dem_store.json
         path_to_vrt_file: /Data/archive/DEM/aster_dem.vrt
         provided_data_type: Aster DEM
         url: http://www2.geog.ucl.ac.uk/~ucfafyi/eles/
@@ -97,13 +97,13 @@
         password: None
         path: /Data/archive/
         pattern: /dt/yy/mm/dd/
-        temp_dir: /home/user/.multiply/temp/modis_mcd43a1/
+        temp_dir: /home/{user}/.multiply/temp/modis_mcd43a1/
         username: None
       type: LpDaacFileSystem
     Id: modis_mcd43a1
     MetaInfoProvider:
       parameters:
-        path_to_json_file: /home/user/.multiply/modis_mcd43a1_store.json
+        path_to_json_file: /home/{user}/.multiply/modis_mcd43a1_store.json
       type: LpDaacMetaInfoProvider
 - DataStore:
     FileSystem:
@@ -114,6 +114,6 @@
     Id: S2L2
     MetaInfoProvider:
       parameters:
-        path_to_json_file: /home/user/.multiply/s2_l2_store.json
+        path_to_json_file: /home/{user}/.multiply/s2_l2_store.json
         supported_data_types: AWS_S2_L2
       type: JsonMetaInfoProvider

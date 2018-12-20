@@ -98,10 +98,15 @@ def set_up_data_stores():
     data_store_lists = yaml.load(stream)
     for data_store_entry in data_store_lists:
         if 'temp_dir' in data_store_entry['DataStore']['FileSystem']['parameters']:
-            data_store_entry['DataStore']['FileSystem']['parameters']['temp_dir'].replace('{user}', username)
+            data_store_entry['DataStore']['FileSystem']['parameters']['temp_dir'] = \
+                data_store_entry['DataStore']['FileSystem']['parameters']['temp_dir'].replace('{user}', username)
         if 'path_to_json_file' in data_store_entry['DataStore']['MetaInfoProvider']['parameters']:
-            data_store_entry['DataStore']['MetaInfoProvider']['parameters']['path_to_json_file'].\
+            data_store_entry['DataStore']['MetaInfoProvider']['parameters']['path_to_json_file'] = \
+                data_store_entry['DataStore']['MetaInfoProvider']['parameters']['path_to_json_file'].\
                 replace('{user}', username)
+
     stream.close()
     with open(data_stores_file, 'w') as file:
         yaml.dump(data_store_lists, file, default_flow_style=False)
+
+set_up_data_stores()

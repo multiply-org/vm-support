@@ -62,7 +62,7 @@ def set_earth_data_authentication(username: str, password: str):
 
 def _set_earth_data_authentication_to_file(username: str, password: str, data_stores_file: str):
     stream = open(data_stores_file, 'r')
-    data_store_lists = yaml.load(stream)
+    data_store_lists = yaml.safe_load(stream)
     for data_store_entry in data_store_lists:
         if data_store_entry['DataStore']['FileSystem']['type'] == 'LpDaacFileSystem':
             data_store_entry['DataStore']['FileSystem']['parameters']['username'] = username
@@ -95,7 +95,7 @@ def set_up_data_stores():
     shutil.copyfile(PATH_TO_VM_DATA_STORES_FILE, data_stores_file)
     username = getpass.getuser()
     stream = open(data_stores_file, 'r')
-    data_store_lists = yaml.load(stream)
+    data_store_lists = yaml.safe_load(stream)
     for data_store_entry in data_store_lists:
         if 'temp_dir' in data_store_entry['DataStore']['FileSystem']['parameters']:
             temp_dir = data_store_entry['DataStore']['FileSystem']['parameters']['temp_dir'].replace('{user}', username)

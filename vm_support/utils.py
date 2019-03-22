@@ -82,12 +82,24 @@ def set_permissions(file_refs: List[Union[str, FileRef]]):
                 _set_permissions_for_file(item)
         else:
             _set_permissions_for_file(file_ref)
+        parent_dir = _get_parent_dir(file_ref)
+        while not _not_all_permissions_set(parent_dir):
+            _set_permissions_for_file(parent_dir)
+            parent_dir = _get_parent_dir(parent_dir)
+
+
+def _get_parent_dir(file: str):
+    return os.path.abspath(os.path.join(file, os.pardir))
 
 
 def _set_permissions_for_file(path: str):
-    stat = os.stat(path)
-    if stat.st_mode & ALL_PERMISSIONS != ALL_PERMISSIONS and stat.st_uid == os.getuid():
+    if _not_all_permissions_set(path):
         os.chmod(path, ALL_PERMISSIONS)
+
+
+def _not_all_permissions_set(file_ref: str) -> bool:
+    stat = os.stat(file_ref)
+    return stat.st_mode & ALL_PERMISSIONS != ALL_PERMISSIONS and stat.st_uid == os.getuid()
 
 
 def set_up_data_stores():

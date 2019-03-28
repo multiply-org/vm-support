@@ -1,3 +1,9 @@
+## Version 0.1.4
+
+### Fixes
+* Fixed setting up of data stores
+* Fixed setting of permissions
+
 ## Version 0.1.3
 
 ### Fixes

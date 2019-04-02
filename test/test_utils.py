@@ -1,8 +1,11 @@
 import os
 import shutil
+import stat
 import yaml
-from vm_support.utils import create_config_file, _set_earth_data_authentication_to_file
+from vm_support.utils import create_config_file, _set_earth_data_authentication_to_file, set_permissions
 
+ALL_PERMISSIONS = stat.S_IRUSR + stat.S_IWUSR + stat.S_IXUSR + stat.S_IRGRP + stat.S_IWGRP + stat.S_IXGRP + \
+                  stat.S_IROTH + stat.S_IWOTH + stat.S_IXOTH
 BARRAX_POLYGON = "POLYGON((-2.20397502663252 39.09868106889479,-1.9142106223355313 39.09868106889479," \
                  "-1.9142106223355313 38.94504502508093,-2.20397502663252 38.94504502508093," \
                  "-2.20397502663252 39.09868106889479))"
@@ -37,3 +40,19 @@ def test_set_earth_data_authentication():
         stream.close()
     finally:
         os.remove(data_stores_file_2)
+
+
+def test_set_permissions():
+    new_test_dir = '{}{}'.format(TEST_DIR, 'dir1')
+    try:
+        os.mkdir(new_test_dir)
+        newer_test_dir = '{}/{}'.format(new_test_dir, 'dir2')
+        os.mkdir(newer_test_dir)
+        file_name = '{}/{}'.format(newer_test_dir, 'file')
+        open(file_name, "w+").close()
+        set_permissions([file_name])
+        assert os.stat(file_name).st_mode & ALL_PERMISSIONS == ALL_PERMISSIONS
+        assert os.stat(new_test_dir).st_mode & ALL_PERMISSIONS == ALL_PERMISSIONS
+        assert os.stat(newer_test_dir).st_mode & ALL_PERMISSIONS == ALL_PERMISSIONS
+    finally:
+        shutil.rmtree(new_test_dir)

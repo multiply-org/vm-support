@@ -14,8 +14,8 @@ from typing import List, Optional, Union
 
 MULTIPLY_DIR_NAME = '.multiply'
 DATA_STORES_FILE_NAME = 'data_stores.yml'
-ALL_PERMISSIONS = stat.S_IRUSR & stat.S_IWUSR & stat.S_IXUSR & stat.S_IRGRP & stat.S_IWGRP & stat.S_IXGRP & \
-                  stat.S_IROTH & stat.S_IWOTH & stat.S_IXOTH
+ALL_PERMISSIONS = stat.S_IRUSR + stat.S_IWUSR + stat.S_IXUSR + stat.S_IRGRP + stat.S_IWGRP + stat.S_IXGRP + \
+                  stat.S_IROTH + stat.S_IWOTH + stat.S_IXOTH
 PATH_TO_VM_DATA_STORES_FILE = pkg_resources.resource_filename(__name__, 'vm_data_stores.yml')
 
 
@@ -83,7 +83,7 @@ def set_permissions(file_refs: List[Union[str, FileRef]]):
         else:
             _set_permissions_for_file(file_ref)
         parent_dir = _get_parent_dir(file_ref)
-        while not _not_all_permissions_set(parent_dir):
+        while _need_to_set_permissions(parent_dir) and parent_dir != '/':
             _set_permissions_for_file(parent_dir)
             parent_dir = _get_parent_dir(parent_dir)
 
@@ -93,11 +93,12 @@ def _get_parent_dir(file: str):
 
 
 def _set_permissions_for_file(path: str):
-    if _not_all_permissions_set(path):
-        os.chmod(path, ALL_PERMISSIONS)
+    if _need_to_set_permissions(path):
+        stat = os.stat(path)
+        os.chmod(path, stat.st_mode | ALL_PERMISSIONS)
 
 
-def _not_all_permissions_set(file_ref: str) -> bool:
+def _need_to_set_permissions(file_ref: str) -> bool:
     stat = os.stat(file_ref)
     return stat.st_mode & ALL_PERMISSIONS != ALL_PERMISSIONS and stat.st_uid == os.getuid()
 

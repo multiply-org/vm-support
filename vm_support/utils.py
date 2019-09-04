@@ -30,7 +30,8 @@ def get_working_dir(dir_name: str) -> str:
 
 def create_config_file(temp_dir: str, roi: str, start_time: str, end_time: str, time_interval: str,
                        priors_directory: str, parameter_list: Optional[List[str]] =
-                       {'n', 'cab', 'car', 'cb', 'cw', 'cdm', 'lai', 'ala', 'bsoil', 'psoil'}) -> str:
+                       {'n', 'cab', 'car', 'cb', 'cw', 'cdm', 'lai', 'ala', 'bsoil', 'psoil'},
+                       user_prior_data: Optional[dict] = None) -> str:
     config = {'General': {}}
     config['General']['roi'] = roi
     config['General']['start_time'] = start_time
@@ -42,8 +43,14 @@ def create_config_file(temp_dir: str, roi: str, start_time: str, end_time: str, 
     config['Prior']['General']['directory_data'] = '/data/auxiliary/priors/Static/Vegetation/'
     for parameter in parameter_list:
         config['Prior'][parameter] = {}
-        config['Prior'][parameter]['database'] = {}
-        config['Prior'][parameter]['database']['static_dir'] = 'same as General directory_data'
+        data_base_required = True
+        if user_prior_data is not None and parameter in user_prior_data:
+            config['Prior'][parameter]['user'] = user_prior_data[parameter]
+            if 'mu' in user_prior_data[parameter]:
+                data_base_required = False
+        if data_base_required:
+            config['Prior'][parameter]['database'] = {}
+            config['Prior'][parameter]['database']['static_dir'] = 'same as General directory_data'
     config_file_name = '{}/config.yaml'.format(temp_dir)
     with open(config_file_name, 'w') as config_file:
         yaml.dump(config, config_file, default_flow_style=False)

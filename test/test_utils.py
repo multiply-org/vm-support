@@ -11,12 +11,85 @@ DATA_STORES_FILE = 'dummy_data_stores'
 DATA_STORES_FILE_EXTENSION = '.yaml'
 
 
-def test_create_config_file():
+def test_create_config_file_default():
     config_file = '{}/config.yaml'.format(TEST_DIR)
+    if os.path.exists(config_file):
+        os.remove(config_file)
     try:
         priors_dir = '{}/priors'.format(TEST_DIR)
         create_config_file(TEST_DIR, BARRAX_POLYGON, '2017-06-01', '2017-06-30', '10', priors_dir)
         assert os.path.exists(config_file)
+        with open(config_file) as config_stream:
+            config = yaml.safe_load(config_stream)
+            expected_config = {"General": {'end_time': '2017-06-30',
+                                           'roi': 'POLYGON((-2.20397502663252 39.09868106889479,'
+                                                  '-1.9142106223355313 39.09868106889479,'
+                                                  '-1.9142106223355313 38.94504502508093,'
+                                                  '-2.20397502663252 38.94504502508093,'
+                                                  '-2.20397502663252 39.09868106889479))',
+                                           'start_time': '2017-06-01', 'time_interval': '10'},
+                               'Prior': {'General': {'directory_data': "/data/auxiliary/priors/Static/Vegetation/"},
+                                         'ala': {'database': {'static_dir': 'same as General directory_data'}},
+                                         'bsoil': {'database': {'static_dir': 'same as General directory_data'}},
+                                         'cab': {'database': {'static_dir': 'same as General directory_data'}},
+                                         'car': {'database': {'static_dir': 'same as General directory_data'}},
+                                         'cb': {'database': {'static_dir': 'same as General directory_data'}},
+                                         'cdm': {'database': {'static_dir': 'same as General directory_data'}},
+                                         'cw': {'database': {'static_dir': 'same as General directory_data'}},
+                                         'lai': {'database': {'static_dir': 'same as General directory_data'}},
+                                         'n': {'database': {'static_dir': 'same as General directory_data'}},
+                                         'psoil': {'database': {'static_dir': 'same as General directory_data'}},
+                                         'output_directory': './test/test_data//priors'}}
+            _assert_dict_equals(expected_config, config)
+    finally:
+        if os.path.exists(config_file):
+            os.remove(config_file)
+
+
+def _assert_dict_equals(expected: dict, actual: dict):
+    assert expected.keys() == actual.keys()
+    for key in expected:
+        _assert_key_equals(expected[key], actual[key])
+
+
+def _assert_key_equals(expected_key, actual_key):
+    if type(expected_key) is dict:
+        _assert_dict_equals(expected_key, actual_key)
+    elif type(expected_key) is list:
+        for i, item in enumerate(expected_key):
+            _assert_key_equals(item, actual_key[i])
+    else:
+        assert expected_key == actual_key
+
+
+def test_create_config_file_user_specified():
+    config_file = '{}/config.yaml'.format(TEST_DIR)
+    if os.path.exists(config_file):
+        os.remove(config_file)
+    try:
+        priors_dir = '{}/priors'.format(TEST_DIR)
+        variables = ['ala', 'bsoil', 'cab', 'car']
+        user_priors = {'ala': {'unc': 0.1}, 'bsoil': {'mu': 0.6}, 'cab': {'mu': 70., 'unc': 10}, 'fg': {'unc': 24}}
+        create_config_file(TEST_DIR, BARRAX_POLYGON, '2017-06-01', '2017-06-30', '10', priors_dir, variables,
+                           user_priors)
+        assert os.path.exists(config_file)
+        with open(config_file) as config_stream:
+            actual_config = yaml.safe_load(config_stream)
+            expected_config = {"General": {'end_time': '2017-06-30',
+                                           'roi': 'POLYGON((-2.20397502663252 39.09868106889479,'
+                                                  '-1.9142106223355313 39.09868106889479,'
+                                                  '-1.9142106223355313 38.94504502508093,'
+                                                  '-2.20397502663252 38.94504502508093,'
+                                                  '-2.20397502663252 39.09868106889479))',
+                                           'start_time': '2017-06-01', 'time_interval': '10'},
+                               'Prior': {'General': {'directory_data': "/data/auxiliary/priors/Static/Vegetation/"},
+                                         'ala': {'database': {'static_dir': 'same as General directory_data'},
+                                                 'user': {'unc': 0.1}},
+                                         'bsoil': {'user': {'mu': 0.6}},
+                                         'cab': {'user': {'mu': 70., 'unc': 10}},
+                                         'car': {'database': {'static_dir': 'same as General directory_data'}},
+                                         'output_directory': './test/test_data//priors'}}
+        _assert_dict_equals(expected_config, actual_config)
     finally:
         if os.path.exists(config_file):
             os.remove(config_file)

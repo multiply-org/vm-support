@@ -2,7 +2,8 @@ import os
 import shutil
 import stat
 import yaml
-from vm_support.utils import create_config_file, _set_earth_data_authentication_to_file, set_permissions
+from vm_support.utils import create_config_file, create_sar_config_file, _set_earth_data_authentication_to_file, \
+    set_permissions
 
 ALL_PERMISSIONS = stat.S_IRUSR + stat.S_IWUSR + stat.S_IXUSR + stat.S_IRGRP + stat.S_IWGRP + stat.S_IXGRP + \
                   stat.S_IROTH + stat.S_IWOTH + stat.S_IXOTH
@@ -98,6 +99,37 @@ def test_create_config_file_user_specified():
             os.remove(config_file)
 
 
+def test_create_sar_config_file():
+    sar_config_file = '{}sar_config.yaml'.format(TEST_DIR)
+    if os.path.exists(sar_config_file):
+        os.remove(sar_config_file)
+    try:
+        s1_slc_dir = '{}s1_slc'.format(TEST_DIR)
+        s1_grd_dir = '{}s1_grd'.format(TEST_DIR)
+        create_sar_config_file(TEST_DIR, BARRAX_POLYGON, '2017-06-01', '2017-06-30', s1_slc_dir, s1_grd_dir)
+        assert os.path.exists(sar_config_file)
+        with open(sar_config_file) as config_stream:
+            actual_config = yaml.safe_load(config_stream)
+            expected_config = \
+                {"SAR": {
+                    'input_folder': './test/test_data/s1_slc',
+                    'output_folder': './test/test_data/s1_grd',
+                    'gpt': '/software/snap/bin/gpt',
+                    'speckle_filter': {'multi_temporal': {'apply': 'yes'}},
+                    'region':
+                        {'ul': {
+                            'lat': 39.09868106889479,
+                            'lon': -2.20397502663252
+                        }, 'lr': {
+                            'lat': 38.94504502508093,
+                            'lon': -1.9142106223355313}},
+                    'year': 2017}}
+            _assert_dict_equals(expected_config, actual_config)
+    finally:
+        if os.path.exists(sar_config_file):
+            os.remove(sar_config_file)
+
+
 def test_set_earth_data_authentication():
     data_stores_file = '{}/{}{}'.format(TEST_DIR, DATA_STORES_FILE, DATA_STORES_FILE_EXTENSION)
     data_stores_file_2 = '{}/{}2{}'.format(TEST_DIR, DATA_STORES_FILE, DATA_STORES_FILE_EXTENSION)
@@ -115,6 +147,7 @@ def test_set_earth_data_authentication():
         os.remove(data_stores_file_2)
 
 
+@pytest.mark.skip('Works only in Unix machines')
 def test_set_permissions():
     new_test_dir = '{}{}'.format(TEST_DIR, 'dir1')
     try:

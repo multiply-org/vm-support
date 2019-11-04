@@ -8,9 +8,10 @@ import shutil
 import stat
 import yaml
 
-from multiply_core.util import FileRef
+from multiply_core.util import FileRef, get_time_from_string
 from pathlib import Path
 from typing import List, Optional, Union
+from shapely.wkt import loads
 
 MULTIPLY_DIR_NAME = '.multiply'
 DATA_STORES_FILE_NAME = 'data_stores.yml'
@@ -52,6 +53,28 @@ def create_config_file(temp_dir: str, roi: str, start_time: str, end_time: str, 
             config['Prior'][parameter]['database'] = {}
             config['Prior'][parameter]['database']['static_dir'] = 'same as General directory_data'
     config_file_name = '{}/config.yaml'.format(temp_dir)
+    with open(config_file_name, 'w') as config_file:
+        yaml.dump(config, config_file, default_flow_style=False)
+    return config_file_name
+
+
+def create_sar_config_file(temp_dir: str, roi: str, start_time: str, end_time: str, s1_slc_directory: str,
+                           s1_grd_directory: str) -> str:
+    config = {'SAR': {}}
+    config['SAR']['input_folder'] = s1_slc_directory
+    config['SAR']['output_folder'] = s1_grd_directory
+    config['SAR']['gpt'] = '/software/snap/bin/gpt'
+    config['SAR']['speckle_filter'] = {'multi_temporal': {'apply': 'yes'}}
+    minx, miny, maxx, maxy = loads(roi).bounds
+    config['SAR']['region'] = {'ul': {'lat': maxy, 'lon': minx}, 'lr': {'lat': miny, 'lon': maxx}}
+    start_time = get_time_from_string(start_time)
+    if start_time is not None:
+        config['SAR']['year'] = start_time.year
+    else:
+        end_time = get_time_from_string(end_time)
+        if end_time is not None:
+            config['SAR']['year'] = end_time.year
+    config_file_name = '{}/sar_config.yaml'.format(temp_dir)
     with open(config_file_name, 'w') as config_file:
         yaml.dump(config, config_file, default_flow_style=False)
     return config_file_name

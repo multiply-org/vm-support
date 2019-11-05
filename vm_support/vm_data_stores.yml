@@ -117,3 +117,15 @@
         path_to_json_file: /home/{user}/.multiply/s2_l2_store.json
         supported_data_types: AWS_S2_L2
       type: JsonMetaInfoProvider
+- DataStore:
+    FileSystem:
+      type: MundiRestFileSystem
+      parameters:
+        temp_dir: /home/{user}/.multiply/temp/mundi/
+        path: /Data/archive/
+        pattern: /dt/yy/mm/dd/
+    Id: MundiRest
+    MetaInfoProvider:
+      type: MundiMetaInfoProvider
+      parameters:
+        path_to_json_file: /home/{user}/.multiply/mundi_store.json

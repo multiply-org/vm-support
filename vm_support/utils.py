@@ -153,5 +153,3 @@ def set_up_data_stores():
     stream.close()
     with open(data_stores_file, 'w') as file:
         yaml.dump(data_store_lists, file, default_flow_style=False)
-
-set_up_data_stores()

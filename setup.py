@@ -2,10 +2,11 @@
 
 from setuptools import setup
 
-requirements = [
-    'pytest',
-    'pyyaml',
-]
+# requirements = [
+#     'pytest',
+#     'pyyaml',
+# ]
+requirements = []
 
 __version__ = None
 with open('vm_support/version.py') as f:

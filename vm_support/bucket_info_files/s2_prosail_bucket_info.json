@@ -1,0 +1,5 @@
+{
+  "bucket": "multiply-aux",
+  "prefix": "forward-models/s2/s2_prosail/",
+  "location_on_dias": "/data/auxiliary/models/s2_prosail/"
+}

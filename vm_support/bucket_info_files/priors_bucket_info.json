@@ -1,0 +1,5 @@
+{
+  "bucket": "multiply-aux",
+  "prefix": "priors/static/vegetation/priors/",
+  "location_on_dias": "/data/auxiliary/priors/Static/Vegetation/Priors/"
+}

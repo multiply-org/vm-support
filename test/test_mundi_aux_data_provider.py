@@ -19,7 +19,7 @@ def test_name():
 @pytest.mark.skip(reason='Test requires MUNDI keys')
 def test_list_elements():
     mundi_aux_data_provider = MundiAuxDataProvider(PARAMETERS)
-    elements = mundi_aux_data_provider.list_elements(BASE_FOLDER)
+    elements = mundi_aux_data_provider.list_elements(BASE_FOLDER, return_absolute_paths=False)
     assert 12 == len(elements)
     assert './test/test_data/base_folder\\ESA_CCI_SM_clim_01.tiff' in elements
     assert './test/test_data/base_folder\\ESA_CCI_SM_clim_02.tiff' in elements
@@ -38,7 +38,7 @@ def test_list_elements():
 @pytest.mark.skip(reason='Test requires MUNDI keys')
 def test_list_elements_pattern_1():
     mundi_aux_data_provider = MundiAuxDataProvider(PARAMETERS)
-    elements = mundi_aux_data_provider.list_elements(BASE_FOLDER, '*_clim_0*')
+    elements = mundi_aux_data_provider.list_elements(BASE_FOLDER, '*_clim_0*', return_absolute_paths=False)
     assert 9 == len(elements)
     assert './test/test_data/base_folder\\ESA_CCI_SM_clim_01.tiff' in elements
     assert './test/test_data/base_folder\\ESA_CCI_SM_clim_02.tiff' in elements
@@ -54,7 +54,7 @@ def test_list_elements_pattern_1():
 @pytest.mark.skip(reason='Test requires MUNDI keys')
 def test_list_elements_pattern_2():
     mundi_aux_data_provider = MundiAuxDataProvider(PARAMETERS)
-    elements = mundi_aux_data_provider.list_elements(BASE_FOLDER, '*_clim_1*')
+    elements = mundi_aux_data_provider.list_elements(BASE_FOLDER, '*_clim_1*', return_absolute_paths=False)
     assert 3 == len(elements)
     assert './test/test_data/base_folder\\ESA_CCI_SM_clim_10.tiff' in elements
     assert './test/test_data/base_folder\\ESA_CCI_SM_clim_11.tiff' in elements

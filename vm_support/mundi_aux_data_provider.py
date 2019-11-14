@@ -29,9 +29,12 @@ class MundiAuxDataProvider(AuxDataProvider):
     def name(cls) -> str:
         return MUNDI_AUX_DATA_PROVIDER_NAME
 
-    def list_elements(self, base_folder: str, pattern: [Optional[str]] = '*') -> List[str]:
+    def list_elements(self, base_folder: str, pattern: [Optional[str]] = '*', return_absolute_paths: bool = True) \
+            -> List[str]:
+        if return_absolute_paths:
+            base_folder = os.path.abspath(base_folder)
         from obs import ObsClient
-        path_to_bucket_info_file = f'{base_folder}/bucket_info.json'
+        path_to_bucket_info_file = os.path.join(base_folder, 'bucket_info.json')
         file_names = []
         with open(path_to_bucket_info_file, "r") as bucket_info_file:
             bucket_info = json.load(bucket_info_file)

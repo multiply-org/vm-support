@@ -60,7 +60,7 @@ class MundiAuxDataProvider(AuxDataProvider):
             bucket_info = json.load(bucket_info_file)
             key = f"{bucket_info['prefix']}/{name.split('/')[-1]}"
             obs_client = ObsClient(access_key_id=self._access_key_id,
-                                    secret_access_key=self._secret_access_key,
+                                   secret_access_key=self._secret_access_key,
                                    server=_MUNDI_SERVER)
             resp = obs_client.getObject(bucketName=bucket_info['bucket'], objectKey=key, downloadPath=name)
             if resp.status >= 300:
@@ -76,5 +76,5 @@ class MundiAuxDataProviderCreator(AuxDataProviderCreator):
         return MUNDI_AUX_DATA_PROVIDER_NAME
 
     @classmethod
-    def create_aux_data_provider(self, parameters: dict):
+    def create_aux_data_provider(cls, parameters: dict):
         return MundiAuxDataProvider(parameters)

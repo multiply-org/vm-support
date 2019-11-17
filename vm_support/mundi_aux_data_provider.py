@@ -33,7 +33,7 @@ class MundiAuxDataProvider(AuxDataProvider):
             -> List[str]:
         if return_absolute_paths:
             base_folder = os.path.abspath(base_folder)
-        from obs import ObsClient
+        from com.obs.client.obs_client import ObsClient
         path_to_bucket_info_file = os.path.join(base_folder, 'bucket_info.json')
         file_names = []
         with open(path_to_bucket_info_file, "r") as bucket_info_file:
@@ -46,7 +46,9 @@ class MundiAuxDataProvider(AuxDataProvider):
                 for content in objects.body.contents:
                     remote_file_name = content.key.split('/')[-1]
                     if fnmatch.fnmatch(remote_file_name, pattern):
-                        file_names.append(os.path.join(base_folder, remote_file_name))
+                        file_name = os.path.join(base_folder, remote_file_name)
+                        file_name = file_name.replace('\\', '/')
+                        file_names.append(file_name)
             else:
                 logging.error(objects.errorCode)
             obs_client.close()
@@ -55,7 +57,7 @@ class MundiAuxDataProvider(AuxDataProvider):
     def assure_element_provided(self, name: str) -> bool:
         if os.path.exists(name):
             return True
-        from obs import ObsClient
+        from com.obs.client.obs_client import ObsClient
         name = name.replace('\\', '/')
         base_folder = os.path.abspath(os.path.join(name, os.pardir))
         path_to_bucket_info_file = f'{base_folder}/bucket_info.json'

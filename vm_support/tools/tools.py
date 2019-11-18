@@ -58,7 +58,7 @@ def get_dynamic_data(data_access_component: DataAccessComponent, roi: str, roi_g
     set_permissions(cams_urls)
     create_sym_links(cams_urls, cams_tiff_directory)
     print('Retrieving S2 L1C data ...')
-    s2_urls = data_access_component.get_data_urls(roi, start_time, stop_time, 'AWS_S2_L1C', rg)
+    s2_urls = data_access_component.get_data_urls(roi, start_time, stop_time, 'AWS_S2_L1C, S2_L1C', rg)
     set_permissions(s2_urls)
     create_sym_links(s2_urls, s2_l1c_directory)
     print('Done retrieving dynamic data')

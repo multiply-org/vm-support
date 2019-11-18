@@ -4,7 +4,7 @@ import shutil
 import stat
 import yaml
 from vm_support.utils import create_config_file, create_sar_config_file, _set_earth_data_authentication_to_file, \
-    set_permissions
+    set_permissions, _set_mundi_authentication_to_file
 
 ALL_PERMISSIONS = stat.S_IRUSR + stat.S_IWUSR + stat.S_IXUSR + stat.S_IRGRP + stat.S_IWGRP + stat.S_IXGRP + \
                   stat.S_IROTH + stat.S_IWOTH + stat.S_IXOTH
@@ -143,6 +143,23 @@ def test_set_earth_data_authentication():
             if data_store_entry['DataStore']['Id'] == 'modis_mcd43a1':
                 assert data_store_entry['DataStore']['FileSystem']['parameters']['username'] == 'fecvghf'
                 assert data_store_entry['DataStore']['FileSystem']['parameters']['password'] == 'tvhbg'
+        stream.close()
+    finally:
+        os.remove(data_stores_file_2)
+
+
+def test_set_mundi_authentication():
+    data_stores_file = '{}/{}{}'.format(TEST_DIR, DATA_STORES_FILE, DATA_STORES_FILE_EXTENSION)
+    data_stores_file_2 = '{}/{}2{}'.format(TEST_DIR, DATA_STORES_FILE, DATA_STORES_FILE_EXTENSION)
+    shutil.copyfile(data_stores_file, data_stores_file_2)
+    try:
+        _set_mundi_authentication_to_file('fgezn', 'khjuzv', data_stores_file_2)
+        stream = open(data_stores_file_2, 'r')
+        data_store_lists = yaml.safe_load(stream)
+        for data_store_entry in data_store_lists:
+            if data_store_entry['DataStore']['Id'] == 'Mundi':
+                assert data_store_entry['DataStore']['FileSystem']['parameters']['access_key_id'] == 'fgezn'
+                assert data_store_entry['DataStore']['FileSystem']['parameters']['secret_access_key'] == 'khjuzv'
         stream.close()
     finally:
         os.remove(data_stores_file_2)

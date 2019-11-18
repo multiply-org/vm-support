@@ -102,3 +102,17 @@
         path_to_json_file: C:\Users\tonio/.multiply/s2_l2_store.json
         supported_data_types: AWS_S2_L2
       type: JsonMetaInfoProvider
+- DataStore:
+    FileSystem:
+      parameters:
+        path: /home/tonio-bc/.multiply/data/
+        pattern: /dt/yy/mm/dd/
+        temp_dir: /home/tonio-bc/.multiply/temp/mundi/
+        access_key_id: null
+        secret_access_key: null
+      type: MundiFileSystem
+    Id: Mundi
+    MetaInfoProvider:
+      parameters:
+        path_to_json_file: /home/tonio-bc/.multiply/mundi_local_store.json
+      type: MundiMetaInfoProvider

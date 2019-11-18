@@ -291,16 +291,14 @@ def Plot_SRDS(sdrs_directory, prodnr=0):
         subdir = glob.glob(subdir + '/*')[prodnr]
         data_files = set(glob.glob(subdir + '/' + band_of_interest + '*')) - \
                      set(glob.glob(subdir + '/' + band_of_interest + '*unc*'))
-
         Nc = 4
         Nr = len(data_files) / Nc + 1
         plt.figure(figsize=[20, 10])
-        r = []
         avg = []
         for i in range(12):
             bandnr = 'B%02.0f*' % (i + 1)
-            data_file = set(glob.glob(subdir + '/' + bandnr + band_of_interest + '*')) - \
-                        set(glob.glob(subdir + '/' + bandnr + band_of_interest + '*unc*'))
+            data_file = set(glob.glob(subdir + '/' + '*' + bandnr + band_of_interest + '*')) - \
+                        set(glob.glob(subdir + '/' + '*' + bandnr + band_of_interest + '*unc*'))
             data_file = list(data_file)[0]
             data_set = gdal.Open(data_file)
             data = data_set.ReadAsArray(0) * 0.01

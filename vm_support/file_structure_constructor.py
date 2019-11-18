@@ -49,15 +49,23 @@ if not os.path.exists('/data/'):
         subprocess.run(['sudo', 'chmod', '777', '/mnt/multiply/data/'])
         os.makedirs('/mnt/multiply/data/archive')
         os.makedirs('/mnt/multiply/data/auxiliary')
+        os.makedirs('/mnt/multiply/data/temp')
+        os.makedirs('/mnt/multiply/data/working_dir')
         # create link to data folder
         subprocess.run(['ln', '-s', '/mnt/multiply/data/archive', '/data/archive'])
         subprocess.run(['ln', '-s', '/mnt/multiply/data/auxiliary', '/data/auxiliary'])
+        subprocess.run(['ln', '-s', '/mnt/multiply/data/temp', '/data/temp'])
+        subprocess.run(['ln', '-s', '/mnt/multiply/data/working_dir', '/data/working_dir'])
     else:
         # just create data folders
         subprocess.run(['sudo', 'mkdir', '/data/archive/'])
         subprocess.run(['sudo', 'mkdir', '/data/auxiliary/'])
+        subprocess.run(['sudo', 'mkdir', '/data/temp/'])
+        subprocess.run(['sudo', 'mkdir', '/data/working_dir/'])
         subprocess.run(['sudo', 'chown', 'ubuntu', '/data/archive/'])
         subprocess.run(['sudo', 'chown', 'ubuntu', '/data/auxiliary/'])
+        subprocess.run(['sudo', 'chown', 'ubuntu', '/data/temp/'])
+        subprocess.run(['sudo', 'chown', 'ubuntu', '/data/working_dir/'])
     # place bucket info files in folders
     logging.info('Placing bucket placeholders ...')
     bucket_info_files = glob.glob('./bucket_info_files/*json')

@@ -97,6 +97,31 @@ def get_priors_old(temp_dir: str, roi: str, start_time: str, end_time: str, time
 
 
 ##############################################################
+def preprocess_s2(s2_l1c_dir: str, modis_dir: str, emus_dir: str, cams_dir: str, dem_dir: str, output_root_dir: str,
+               roi: str):
+    vrt_dem_file = glob.glob(dem_dir + '/' + '*.vrt')[0]
+    processor_dir = '/software/atmospheric_correction/SIAC'
+    create_dir(output_root_dir)
+    dirs = glob.glob(s2_l1c_dir + "/*")
+    for directory in dirs:
+        directory_parts = directory.split('/')
+        product_name = f"{directory_parts[-1]}-ac"
+        print(f'Start pre-processing S2 L1 data from {directory_parts[-2]}')
+        output_dir = output_root_dir + '/' + product_name + '/'
+        command = "PYTHONPATH=$PYTHONPATH:" + processor_dir + "/util python " + processor_dir + "/SIAC_S2.py -f " \
+                  + directory + "/ -m " + modis_dir + " -e " + emus_dir + " -c " + cams_dir + " -d " \
+                  + vrt_dem_file + " -o False" + " -a \'" + roi + "\'"
+        os.system(command)
+
+        create_dir(output_dir)
+        cmd2 = "mv $(find " + directory + '/ -type f) ' + output_dir + '/'
+        os.system(cmd2)
+
+        cmd3 = "cp `readlink " + directory + "/metadata.xml` " + output_dir + "/metadata.xml"
+        os.system(cmd3)
+        print(f'Finished pre-processing S2 L1 data from {directory_parts[-2]}')
+
+
 def preprocess(s2_l1c_dir: str, modis_dir: str, emus_dir: str, cams_dir: str, dem_dir: str, output_root_dir: str,
                roi: str):
     vrt_dem_file = glob.glob(dem_dir + '/' + '*.vrt')[0]

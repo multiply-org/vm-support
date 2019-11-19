@@ -4,8 +4,8 @@ import pytest
 from vm_support import MundiAuxDataProvider, MundiAuxDataProviderCreator
 
 PARAMETERS = {
-    'access_key_id': 'AEBZ3KBYBYS3B6OB02WA',        # place actual key id to run tests
-    'secret_access_key': 'HZyxzEIpmHtIWgtqAElIsrGBTIkHoLYhxsjTc4ig'     # place actual secret access key
+    'access_key_id': '',        # place actual key id to run tests
+    'secret_access_key': ''     # place actual secret access key
 }
 BASE_FOLDER = './test/test_data/base_folder'
 
@@ -16,7 +16,7 @@ def test_name():
     assert 'MUNDI' == provider.name()
 
 
-# @pytest.mark.skip(reason='Test requires MUNDI keys')
+@pytest.mark.skip(reason='Test requires MUNDI keys')
 def test_list_elements():
     mundi_aux_data_provider = MundiAuxDataProvider(PARAMETERS)
     elements = mundi_aux_data_provider.list_elements(BASE_FOLDER, return_absolute_paths=False)
@@ -37,7 +37,7 @@ def test_list_elements():
     assert './test/test_data/base_folder/CLYPPT_M_sl1_250m_ll.tif' in elements
 
 
-# @pytest.mark.skip(reason='Test requires MUNDI keys')
+@pytest.mark.skip(reason='Test requires MUNDI keys')
 def test_list_elements_pattern_1():
     mundi_aux_data_provider = MundiAuxDataProvider(PARAMETERS)
     elements = mundi_aux_data_provider.list_elements(BASE_FOLDER, '*_clim_0*', return_absolute_paths=False)
@@ -53,7 +53,7 @@ def test_list_elements_pattern_1():
     assert './test/test_data/base_folder/ESA_CCI_SM_clim_09.tiff' in elements
 
 
-# @pytest.mark.skip(reason='Test requires MUNDI keys')
+@pytest.mark.skip(reason='Test requires MUNDI keys')
 def test_list_elements_pattern_2():
     mundi_aux_data_provider = MundiAuxDataProvider(PARAMETERS)
     elements = mundi_aux_data_provider.list_elements(BASE_FOLDER, '*_clim_1*', return_absolute_paths=False)
@@ -71,7 +71,7 @@ def test_assure_element_provided_set():
     assert os.path.exists('./test/test_data/base_folder/ESA_CCI_SM_clim_02.tiff')
 
 
-# @pytest.mark.skip(reason='Test requires MUNDI keys')
+@pytest.mark.skip(reason='Test requires MUNDI keys')
 def test_assure_element_provided_download():
     try:
         mundi_aux_data_provider = MundiAuxDataProvider(PARAMETERS)
@@ -85,7 +85,7 @@ def test_assure_element_provided_download():
             os.remove('./test/test_data/base_folder/ESA_CCI_SM_clim_10.tiff')
 
 
-# @pytest.mark.skip(reason='Test requires MUNDI keys')
+@pytest.mark.skip(reason='Test requires MUNDI keys')
 def test_assure_element_provided_not():
     mundi_aux_data_provider = MundiAuxDataProvider(PARAMETERS)
 

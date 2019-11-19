@@ -63,7 +63,7 @@ class MundiAuxDataProvider(AuxDataProvider):
         path_to_bucket_info_file = f'{base_folder}/bucket_info.json'
         with open(path_to_bucket_info_file, "r") as bucket_info_file:
             bucket_info = json.load(bucket_info_file)
-            key = f"{bucket_info['prefix']}/{name.split('/')[-1]}"
+            key = f"{bucket_info['prefix']}{name.split('/')[-1]}"
             obs_client = ObsClient(access_key_id=self._access_key_id,
                                    secret_access_key=self._secret_access_key,
                                    server=_MUNDI_SERVER)

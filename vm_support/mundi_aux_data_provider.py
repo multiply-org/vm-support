@@ -67,6 +67,7 @@ class MundiAuxDataProvider(AuxDataProvider):
             obs_client = ObsClient(access_key_id=self._access_key_id,
                                    secret_access_key=self._secret_access_key,
                                    server=_MUNDI_SERVER)
+            logging.info(f"Downloading from bucket {bucket_info['bucket']} and prefix {key} to {name}")
             resp = obs_client.getObject(bucketName=bucket_info['bucket'], objectKey=key, downloadPath=name)
             if resp.status >= 300:
                 logging.error(resp.errorCode)

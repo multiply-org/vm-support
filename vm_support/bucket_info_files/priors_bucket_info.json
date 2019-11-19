@@ -1,5 +1,16 @@
 {
   "bucket": "multiply-aux",
-  "prefix": "priors/static/vegetation/priors/",
+  "prefixes": [
+    "priors/static/vegetation/priors/ala/",
+    "priors/static/vegetation/priors/bsoil/",
+    "priors/static/vegetation/priors/psoil/",
+    "priors/static/vegetation/priors/n/",
+    "priors/static/vegetation/priors/lai/",
+    "priors/static/vegetation/priors/cw/",
+    "priors/static/vegetation/priors/cdm/",
+    "priors/static/vegetation/priors/cb/",
+    "priors/static/vegetation/priors/car/",
+    "priors/static/vegetation/priors/cab/"
+  ],
   "location_on_dias": "/data/auxiliary/priors/Static/Vegetation/Priors/"
 }

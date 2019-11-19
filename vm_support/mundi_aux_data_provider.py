@@ -41,16 +41,18 @@ class MundiAuxDataProvider(AuxDataProvider):
             obs_client = ObsClient(access_key_id=self._access_key_id,
                                    secret_access_key=self._secret_access_key,
                                    server=_MUNDI_SERVER)
-            objects = obs_client.listObjects(bucketName=bucket_info['bucket'], prefix=bucket_info['prefix'])
-            if objects.status < 300:
-                for content in objects.body.contents:
-                    remote_file_name = content.key.split('/')[-1]
-                    if fnmatch.fnmatch(remote_file_name, pattern):
-                        file_name = os.path.join(base_folder, remote_file_name)
-                        file_name = file_name.replace('\\', '/')
-                        file_names.append(file_name)
-            else:
-                logging.error(objects.errorCode)
+            prefixes = bucket_info['prefixes']
+            for prefix in prefixes:
+                objects = obs_client.listObjects(bucketName=bucket_info['bucket'], prefix=prefix)
+                if objects.status < 300:
+                    for content in objects.body.contents:
+                        remote_file_name = content.key.split('/')[-1]
+                        if fnmatch.fnmatch(remote_file_name, pattern):
+                            file_name = os.path.join(base_folder, remote_file_name)
+                            file_name = file_name.replace('\\', '/')
+                            file_names.append(file_name)
+                else:
+                    logging.error(objects.errorCode)
             obs_client.close()
         return file_names
 
@@ -63,15 +65,17 @@ class MundiAuxDataProvider(AuxDataProvider):
         path_to_bucket_info_file = f'{base_folder}/bucket_info.json'
         with open(path_to_bucket_info_file, "r") as bucket_info_file:
             bucket_info = json.load(bucket_info_file)
-            key = f"{bucket_info['prefix']}{name.split('/')[-1]}"
-            obs_client = ObsClient(access_key_id=self._access_key_id,
-                                   secret_access_key=self._secret_access_key,
-                                   server=_MUNDI_SERVER)
-            logging.info(f"Downloading from bucket {bucket_info['bucket']} and prefix {key} to {name}")
-            resp = obs_client.getObject(bucketName=bucket_info['bucket'], objectKey=key, downloadPath=name)
-            if resp.status >= 300:
-                logging.error(resp.errorCode)
-                obs_client.close()
+            prefixes = bucket_info['prefixes']
+            for prefix in prefixes:
+                key = f"{prefix}{name.split('/')[-1]}"
+                obs_client = ObsClient(access_key_id=self._access_key_id,
+                                       secret_access_key=self._secret_access_key,
+                                       server=_MUNDI_SERVER)
+                logging.info(f"Downloading from bucket {bucket_info['bucket']} and prefix {key} to {name}")
+                resp = obs_client.getObject(bucketName=bucket_info['bucket'], objectKey=key, downloadPath=name)
+                if resp.status >= 300:
+                    logging.error(resp.errorCode)
+                    obs_client.close()
         return os.path.exists(name)
 
 

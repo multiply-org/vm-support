@@ -119,6 +119,11 @@ def preprocess_s2(s2_l1c_dir: str, modis_dir: str, emus_dir: str, cams_dir: str,
 
         cmd3 = "cp `readlink " + directory + "/metadata.xml` " + output_dir + "/metadata.xml"
         os.system(cmd3)
+        cmd3 = "cp `readlink " + directory + "/MTD_MSIL1C.xml` " + output_dir + "/MTD_MSIL1C.xml"
+        os.system(cmd3)
+        path_to_mtd_tl = glob.glob(os.path.join(directory, 'GRANULE/*/MTD_TL.xml'))
+        cmd3 = "cp `readlink " + path_to_mtd_tl + "` " + output_dir + "/MTD_TL.xml"
+        os.system(cmd3)
         print(f'Finished pre-processing S2 L1 data from {directory_parts[-2]}')
 
 

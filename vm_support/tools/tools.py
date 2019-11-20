@@ -252,8 +252,7 @@ def infer_new(config_file: str, start_date: str, end_date: str, previous_state: 
               sdrs_directory: str,
               next_state: str, biophys_dir: str, variables: List[str], state_mask: Optional[str],
               spatial_resolution: Optional[int], roi_grid: Optional[str], destination_grid: Optional[str]):
-    processor_dir = '/software/inference-engine-0.4/multiply_inference_engine'
-    s2_emulators_dir = '/data/archive/emulators/s2_prosail'
+    s2_emulators_dir = '/data/auxiliary/models/s2_prosail'
 
     # setup parameters
     with open(config_file) as f:

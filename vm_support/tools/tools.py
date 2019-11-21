@@ -171,7 +171,7 @@ def create_dir(dir):
 
 def put_data(data_access_component: DataAccessComponent, sdrs_directory: str):
     for sdr in os.listdir(sdrs_directory):
-        data_access_component.put(sdrs_directory + '/' + sdr, 'S2_L2')
+        data_access_component.put(sdrs_directory + '/' + sdr, 'S2L2')
     return
 
 

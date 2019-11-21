@@ -1,4 +1,5 @@
 import os
+from multiply_core.util import get_time_from_string
 from multiply_data_access import DataAccessComponent
 import datetime
 import glob
@@ -359,15 +360,17 @@ def Plot_PRIORS(roi_centroid, priors_directory_for_date, variables):
             source = 'Not showing'
 
 
-def Plot_TRAITS(biophys_output, date, variables_subset):
+def Plot_TRAITS(biophys_output, date: str, variables_subset):
     # plot the variables,
     Nc = 2
     Nr = len(variables_subset) / Nc + 1
     plt.figure(figsize=[20, 20])
+    date = get_time_from_string(date)
     for i, variable_of_interest in enumerate(variables_subset):
-        data_file = set(glob.glob(biophys_output + '/*' + variable_of_interest + '*' + date + '*')) - \
-                    set(glob.glob(biophys_output + '/*' + variable_of_interest + '*' + date + '*unc*'))
-
+        file_name = "%s_%s.tif" % (variable_of_interest, date.strftime("A%Y%j"))
+        unc_file_name = "%s_%s_unc.tif" % (variable_of_interest, date.strftime("A%Y%j"))
+        data_file = set(glob.glob(biophys_output + '/' + file_name)) - \
+                    set(glob.glob(biophys_output + '/' + unc_file_name))
         # read data
         data = -99
         for filename in data_file:

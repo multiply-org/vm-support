@@ -1,6 +1,7 @@
 __author__ = 'Tonio Fincke (Brockmann Consult GmbH)'
 
 import getpass
+import json
 import glob
 import os
 import pkg_resources
@@ -14,6 +15,7 @@ from typing import List, Optional, Union
 from shapely.wkt import loads
 
 MULTIPLY_DIR_NAME = '.multiply'
+AUX_DATA_PROVIDER_FILE_NAME = 'aux_data_provider.json'
 DATA_STORES_FILE_NAME = 'data_stores.yml'
 ALL_PERMISSIONS = stat.S_IRUSR + stat.S_IWUSR + stat.S_IXUSR + stat.S_IRGRP + stat.S_IWGRP + stat.S_IXGRP + \
                   stat.S_IROTH + stat.S_IWOTH + stat.S_IXOTH
@@ -79,6 +81,11 @@ def create_sar_config_file(temp_dir: str, roi: str, start_time: str, end_time: s
     return config_file_name
 
 
+def _get_aux_data_provider_file() -> str:
+    home_dir = str(Path.home())
+    return '{0}/{1}/{2}'.format(home_dir, MULTIPLY_DIR_NAME, AUX_DATA_PROVIDER_FILE_NAME)
+
+
 def _get_data_stores_file() -> str:
     home_dir = str(Path.home())
     return '{0}/{1}/{2}'.format(home_dir, MULTIPLY_DIR_NAME, DATA_STORES_FILE_NAME)
@@ -103,10 +110,12 @@ def _set_earth_data_authentication_to_file(username: str, password: str, data_st
 
 def set_mundi_authentication(access_key_id: str, secret_access_key: str):
     data_stores_file = _get_data_stores_file()
-    _set_mundi_authentication_to_file(access_key_id, secret_access_key, data_stores_file)
+    aux_data_provider_file = _get_aux_data_provider_file()
+    _set_mundi_authentication_to_data_stores_file(access_key_id, secret_access_key, data_stores_file)
+    _set_mundi_authentication_to_aux_data_provider_file(access_key_id, secret_access_key, aux_data_provider_file)
 
 
-def _set_mundi_authentication_to_file(access_key_id: str, secret_access_key: str, data_stores_file: str):
+def _set_mundi_authentication_to_data_stores_file(access_key_id: str, secret_access_key: str, data_stores_file: str):
     stream = open(data_stores_file, 'r')
     data_store_lists = yaml.safe_load(stream)
     for data_store_entry in data_store_lists:
@@ -116,6 +125,18 @@ def _set_mundi_authentication_to_file(access_key_id: str, secret_access_key: str
     stream.close()
     with open(data_stores_file, 'w') as file:
         yaml.dump(data_store_lists, file, default_flow_style=False)
+
+
+def _set_mundi_authentication_to_aux_data_provider_file(access_key_id: str, secret_access_key: str,
+                                                        aux_data_provider_file: str):
+    with open(aux_data_provider_file, "r") as json_file:
+        aux_data_provision = json.load(json_file)
+        if 'access_key_id' in aux_data_provision:
+            aux_data_provision['access_key_id'] = access_key_id
+        if 'secret_access_key' in aux_data_provision:
+            aux_data_provision['secret_access_key'] = secret_access_key
+    with open(aux_data_provider_file, "w") as json_file:
+        json.dump(aux_data_provision, json_file)
 
 
 def set_permissions(file_refs: List[Union[str, FileRef]]):
@@ -163,8 +184,8 @@ def set_up_data_stores():
                 os.makedirs(temp_dir)
         if 'path_to_json_file' in data_store_entry['DataStore']['MetaInfoProvider']['parameters']:
             data_store_entry['DataStore']['MetaInfoProvider']['parameters']['path_to_json_file'] = \
-                data_store_entry['DataStore']['MetaInfoProvider']['parameters']['path_to_json_file'].\
-                replace('{user}', username)
+                data_store_entry['DataStore']['MetaInfoProvider']['parameters']['path_to_json_file']. \
+                    replace('{user}', username)
 
     stream.close()
     with open(data_stores_file, 'w') as file:

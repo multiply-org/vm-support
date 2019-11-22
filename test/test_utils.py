@@ -1,10 +1,11 @@
+import json
 import os
 import pytest
 import shutil
 import stat
 import yaml
 from vm_support.utils import create_config_file, create_sar_config_file, _set_earth_data_authentication_to_file, \
-    set_permissions, _set_mundi_authentication_to_file
+    set_permissions, _set_mundi_authentication_to_data_stores_file,_set_mundi_authentication_to_aux_data_provider_file
 
 ALL_PERMISSIONS = stat.S_IRUSR + stat.S_IWUSR + stat.S_IXUSR + stat.S_IRGRP + stat.S_IWGRP + stat.S_IXGRP + \
                   stat.S_IROTH + stat.S_IWOTH + stat.S_IXOTH
@@ -13,7 +14,9 @@ BARRAX_POLYGON = "POLYGON((-2.20397502663252 39.09868106889479,-1.91421062233553
                  "-2.20397502663252 39.09868106889479))"
 TEST_DIR = './test/test_data/'
 DATA_STORES_FILE = 'dummy_data_stores'
+AUX_DATA_PROVIDER_FILE = 'aux_data_provider'
 DATA_STORES_FILE_EXTENSION = '.yaml'
+AUX_DATA_PROVIDER_FILE_EXTENSION = '.json'
 
 
 def test_create_config_file_default():
@@ -148,12 +151,12 @@ def test_set_earth_data_authentication():
         os.remove(data_stores_file_2)
 
 
-def test_set_mundi_authentication():
+def test_set_mundi_authentication_to_data_stores_file():
     data_stores_file = '{}/{}{}'.format(TEST_DIR, DATA_STORES_FILE, DATA_STORES_FILE_EXTENSION)
     data_stores_file_2 = '{}/{}2{}'.format(TEST_DIR, DATA_STORES_FILE, DATA_STORES_FILE_EXTENSION)
     shutil.copyfile(data_stores_file, data_stores_file_2)
     try:
-        _set_mundi_authentication_to_file('fgezn', 'khjuzv', data_stores_file_2)
+        _set_mundi_authentication_to_data_stores_file('fgezn', 'khjuzv', data_stores_file_2)
         stream = open(data_stores_file_2, 'r')
         data_store_lists = yaml.safe_load(stream)
         for data_store_entry in data_store_lists:
@@ -163,6 +166,25 @@ def test_set_mundi_authentication():
         stream.close()
     finally:
         os.remove(data_stores_file_2)
+
+
+def test_set_mundi_authentication_to_aux_data_provider_file():
+    aux_data_provider_file = '{}/{}{}'.format(TEST_DIR, AUX_DATA_PROVIDER_FILE, AUX_DATA_PROVIDER_FILE_EXTENSION)
+    aux_data_provider_file_2 = '{}/{}2{}'.format(TEST_DIR, AUX_DATA_PROVIDER_FILE, AUX_DATA_PROVIDER_FILE_EXTENSION)
+    shutil.copyfile(aux_data_provider_file, aux_data_provider_file_2)
+    try:
+        _set_mundi_authentication_to_aux_data_provider_file('fgezn', 'khjuzv', aux_data_provider_file_2)
+        with open(aux_data_provider_file_2, 'r') as json_file:
+            aux_data_provision = json.load(json_file)
+            assert 3 == len(aux_data_provision.keys())
+            assert 'aux_data_provider' in aux_data_provision
+            assert "DUMMY" == aux_data_provision['aux_data_provider']
+            assert "access_key_id" in aux_data_provision
+            assert 'fgezn' == aux_data_provision["access_key_id"]
+            assert "secret_access_key" in aux_data_provision
+            assert 'khjuzv' == aux_data_provision["secret_access_key"]
+    finally:
+        os.remove(aux_data_provider_file_2)
 
 
 @pytest.mark.skip('Works only in Unix machines')

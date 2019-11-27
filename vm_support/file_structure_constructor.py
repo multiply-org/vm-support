@@ -46,7 +46,7 @@ if not os.path.exists('/data/'):
         subprocess.run(['ln', '-s', '/mnt/multiply/data/archive', '/data/archive'])
         subprocess.run(['ln', '-s', '/mnt/multiply/data/auxiliary', '/data/auxiliary'])
         subprocess.run(['ln', '-s', '/mnt/multiply/data/temp', '/data/temp'])
-        subprocess.run(['ln', '-s', '/mnt/multiply/data/working_dir', '/data/working_dirs'])
+        subprocess.run(['ln', '-s', '/mnt/multiply/data/working_dirs', '/data/working_dirs'])
     else:
         # just create data folders
         subprocess.run(['sudo', 'mkdir', '/data/archive/'])

@@ -5,29 +5,29 @@ import os
 import shutil
 import subprocess
 
-
-SUCCESS = 0
-logging.getLogger().setLevel(logging.INFO)
-disk_mounted = False
-devices = ['/dev/vdb', '/dev/vdb1']
-for device in devices:
-    if os.path.exists(device):
-        logging.info(f'Device found at {device}, trying to mount ...')
-        process = subprocess.run(['sudo', 'mount', device, '/mnt/multiply/'])
-        logging.info(f'Mounting process ended with code {process.returncode}')
-        if process.returncode == SUCCESS:
-            logging.info(f'Device {device} mounted.')
-            disk_mounted = True
-            break
-        else:
-            logging.info(f'Device {device} must be formatted.')
-            subprocess.run(['sudo', 'mkfs.ext4', device])
+if not os.path.exists('/mnt/multiply/data'):
+    SUCCESS = 0
+    logging.getLogger().setLevel(logging.INFO)
+    disk_mounted = False
+    devices = ['/dev/vdb', '/dev/vdb1']
+    for device in devices:
+        if os.path.exists(device):
+            logging.info(f'Device found at {device}, trying to mount ...')
             process = subprocess.run(['sudo', 'mount', device, '/mnt/multiply/'])
             logging.info(f'Mounting process ended with code {process.returncode}')
             if process.returncode == SUCCESS:
                 logging.info(f'Device {device} mounted.')
                 disk_mounted = True
                 break
+            else:
+                logging.info(f'Device {device} must be formatted.')
+                subprocess.run(['sudo', 'mkfs.ext4', device])
+                process = subprocess.run(['sudo', 'mount', device, '/mnt/multiply/'])
+                logging.info(f'Mounting process ended with code {process.returncode}')
+                if process.returncode == SUCCESS:
+                    logging.info(f'Device {device} mounted.')
+                    disk_mounted = True
+                    break
 if not os.path.exists('/data/'):
     logging.info('Creating data folder structure ...')
     subprocess.run(['sudo', 'mkdir', '/data/'])

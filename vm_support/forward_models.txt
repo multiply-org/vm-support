@@ -1,0 +1,1 @@
+/data/auxiliary/models/s2_prosail/metadata.json

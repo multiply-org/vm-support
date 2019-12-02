@@ -1,0 +1,5 @@
+working_dir: /data/working_dirs
+workflows_dirs: 
+    - /software/multiply-ui/multiply_ui/server/resources/workflows
+scripts_dirs: 
+    - /software/multiply-ui/multiply_ui/server/resources/scripts

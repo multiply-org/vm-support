@@ -23,7 +23,8 @@ PATH_TO_VM_DATA_STORES_FILE = pkg_resources.resource_filename(__name__, 'vm_data
 
 
 def get_working_dir(dir_name: str) -> str:
-    working_dir = f'/data/working_dir/{dir_name}'
+    username = getpass.getuser()
+    working_dir = '/data/{}/{}'.format(username, dir_name)
     if os.path.exists(working_dir):
         shutil.rmtree(working_dir)
     os.makedirs(working_dir)

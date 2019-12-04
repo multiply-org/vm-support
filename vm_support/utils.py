@@ -60,12 +60,12 @@ def create_config_file(temp_dir: str, roi: str, start_time: str, end_time: str, 
 
 
 def create_sar_config_file(temp_dir: str, roi: str, start_time: str, end_time: str, s1_slc_directory: str,
-                           s1_grd_directory: str) -> str:
+                           s1_grd_directory: str, temporal_filter: str) -> str:
     config = {'SAR': {}}
     config['SAR']['input_folder'] = s1_slc_directory
     config['SAR']['output_folder'] = s1_grd_directory
     config['SAR']['gpt'] = '/software/snap/bin/gpt'
-    config['SAR']['speckle_filter'] = {'multi_temporal': {'apply': 'yes'}}
+    config['SAR']['speckle_filter'] = {'multi_temporal': {'apply': 'yes', 'files': temporal_filter}}
     minx, miny, maxx, maxy = loads(roi).bounds
     config['SAR']['region'] = {'ul': {'lat': maxy, 'lon': minx}, 'lr': {'lat': miny, 'lon': maxx}}
     start_time = get_time_from_string(start_time)

@@ -1,1 +1,3 @@
+/data/auxiliary/models/s1_kaska/metadata.json
 /data/auxiliary/models/s2_prosail/metadata.json
+/data/auxiliary/models/s2_prosail_kaska/metadata.json

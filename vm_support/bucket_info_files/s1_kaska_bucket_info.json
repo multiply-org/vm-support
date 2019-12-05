@@ -1,0 +1,5 @@
+{
+  "bucket": "multiply-aux",
+  "prefixes": ["forward-models/s1/s1_kaska/"],
+  "location_on_dias": "/data/auxiliary/models/s1_kaska/"
+}

@@ -1,0 +1,121 @@
+- DataStore:
+    FileSystem:
+      parameters:
+        path: /data/archive/
+        pattern: /dt/yy/
+        temp_dir: /data/temp/cams/
+        url: http://www2.geog.ucl.ac.uk/~ucfafyi/cams/
+      type: HttpFileSystem
+    Id: cams
+    MetaInfoProvider:
+      parameters:
+        path_to_json_file: /home/ubuntu/.multiply/cams_store.json
+        supported_data_types: CAMS
+        url: http://www2.geog.ucl.ac.uk/~ucfafyi/cams/
+      type: HttpMetaInfoProvider
+- DataStore:
+    FileSystem:
+      parameters:
+        path: /data/archive/
+        pattern: /dt/yy/
+        temp_dir: /data/temp/cams_tiff/
+        url: http://www2.geog.ucl.ac.uk/~ucfafyi/cams/
+      type: HttpFileSystem
+    Id: cams_tiff
+    MetaInfoProvider:
+      parameters:
+        path_to_json_file: /home/ubuntu/.multiply/cams_tiff_store.json
+        supported_data_types: CAMS_TIFF
+        url: http://www2.geog.ucl.ac.uk/~ucfafyi/cams/
+      type: HttpMetaInfoProvider
+- DataStore:
+    FileSystem:
+      parameters:
+        path: /data/archive/emus/
+        pattern: /dt/
+        temp_dir: /data/temp/emus/
+        url: http://www2.geog.ucl.ac.uk/~ucfafyi/emus/
+      type: HttpFileSystem
+    Id: emulators
+    MetaInfoProvider:
+      parameters:
+        path_to_json_file: /home/ubuntu/.multiply/emus_store.json
+        supported_data_types: ISO_MSI_A_EMU,ISO_MSI_B_EMU
+        url: http://www2.geog.ucl.ac.uk/~ucfafyi/emus/
+      type: HttpMetaInfoProvider
+- DataStore:
+    FileSystem:
+      parameters:
+        path: /data/archive/emus/
+        pattern: /dt/
+        temp_dir: /data/temp/emus/
+        url: http://www2.geog.ucl.ac.uk/~ucfafyi/emus/
+      type: HttpFileSystem
+    Id: wv_emulator
+    MetaInfoProvider:
+      parameters:
+        path_to_json_file: /home/ubuntu/.multiply/emus/wv_emu_store.json
+        supported_data_types: WV_EMU
+        url: http://www2.geog.ucl.ac.uk/~ucfafyi/emus/old_emus/
+      type: HttpMetaInfoProvider
+- DataStore:
+    FileSystem:
+      parameters:
+        accessed_file_system: HttpFileSystem
+        encapsulated_data_type: ASTER
+        path: /data/archive/DEM/
+        path_to_vrt_file: /data/archive/DEM/aster_dem.vrt
+        pattern: /dt/
+        temp_dir: /data/temp/aster/
+        url: http://www2.geog.ucl.ac.uk/~ucfafyi/eles/
+      type: VrtFileSystem
+    Id: aster_dem
+    MetaInfoProvider:
+      parameters:
+        accessed_meta_info_provider: HttpMetaInfoProvider
+        encapsulated_data_type: ASTER
+        path_to_json_file: /home/ubuntu/.multiply/aster_dem_store.json
+        path_to_vrt_file: /data/archive/DEM/aster_dem.vrt
+        provided_data_type: Aster_DEM
+        url: http://www2.geog.ucl.ac.uk/~ucfafyi/eles/
+      type: VrtMetaInfoProvider
+- DataStore:
+    FileSystem:
+      parameters:
+        password:
+        path: /data/archive/
+        pattern: /dt/yy/mm/dd/
+        temp_dir: /data/temp/modis_mcd43a1/
+        username:
+      type: LpDaacFileSystem
+    Id: modis_mcd43a1
+    MetaInfoProvider:
+      parameters:
+        path_to_json_file: /home/ubuntu/.multiply/modis_mcd43a1_store.json
+      type: LpDaacMetaInfoProvider
+- DataStore:
+    FileSystem:
+      parameters:
+        path: /data/archive/
+        pattern: /dt/yy/mm/dd/
+      type: LocalFileSystem
+    Id: S2L2
+    MetaInfoProvider:
+      parameters:
+        path_to_json_file: /home/ubuntu/.multiply/s2_l2_store.json
+        supported_data_types: S2_L2
+      type: JsonMetaInfoProvider
+- DataStore:
+    FileSystem:
+      parameters:
+        access_key_id:
+        path: /data/archive/
+        pattern: /dt/yy/mm/dd/
+        secret_access_key:
+        temp_dir: /data/temp/mundi/
+      type: MundiFileSystem
+    Id: Mundi
+    MetaInfoProvider:
+      parameters:
+        path_to_json_file: /home/ubuntu/.multiply/mundi_store.json
+      type: MundiMetaInfoProvider

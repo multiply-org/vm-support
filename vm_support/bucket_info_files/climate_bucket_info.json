@@ -1,5 +1,5 @@
 {
-  "bucket": "multiply-aux",
+  "bucket": "multiply",
   "prefixes": ["priors/static/vegetation/climate/"],
   "location_on_dias": "/data/auxiliary/priors/Static/Vegetation/Climate/"
 }

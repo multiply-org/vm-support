@@ -1,5 +1,5 @@
 {
-  "bucket": "multiply-aux",
+  "bucket": "multiply",
   "prefixes": ["priors/static/soil_texture/"],
   "location_on_dias": "/data/auxiliary/priors/Static/Vegetation/soil_texture/"
 }

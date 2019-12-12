@@ -1,1 +1,1 @@
-{"bucket": "multiply-aux", "prefixes": ["priors/static/soil_texture/", "priors/climatology/soil_moisture/"]}
+{"bucket": "multiply", "prefixes": ["priors/static/soil_texture/", "priors/climatology/soil_moisture/"]}

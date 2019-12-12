@@ -1,5 +1,5 @@
 {
-  "bucket": "multiply-aux",
+  "bucket": "multiply",
   "prefixes": ["priors/climatology/soil_moisture/"],
   "location_on_dias": "/data/auxiliary/priors/climatology/soil_moisture/"
 }

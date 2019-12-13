@@ -1,0 +1,5 @@
+{
+  "bucket": "multiply",
+  "prefixes": ["priors/temporary/sm/"],
+  "location_on_dias": "/data/auxiliary/priors/temporary/sm/"
+}

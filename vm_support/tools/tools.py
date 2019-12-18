@@ -26,7 +26,7 @@ def get_static_data(data_access_component: DataAccessComponent, roi: str, roi_gr
     set_permissions(emu_urls)
     create_sym_links(emu_urls, emulation_directory)
     print('Retrieving DEM ...')
-    dem_urls = data_access_component.get_data_urls(roi, start_time, stop_time, 'Aster DEM', rg)
+    dem_urls = data_access_component.get_data_urls(roi, start_time, stop_time, 'Aster_DEM', rg)
     set_permissions(dem_urls)
     create_sym_links(dem_urls, dem_directory)
     print('Done retrieving static data')

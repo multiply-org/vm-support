@@ -278,9 +278,22 @@ def infer_new(config_file: str, start_date: str, end_date: str, previous_state: 
     if not os.path.exists(biophys_dir):
         os.makedirs(biophys_dir)
 
-    inference_engine.infer(start_date, end_date, parameter_list, priors_directory, sdrs_directory,
-                           previous_state, next_state, s2_emulators_dir, forward_model_list, biophys_dir,
-                           state_mask, roi, spatial_resolution, roi_grid, destination_grid, False)
+    inference_engine.infer(start_time=start_date,
+                           end_time=end_date,
+                           parameter_list=parameter_list,
+                           prior_directory=priors_directory,
+                           datasets_dir=sdrs_directory,
+                           previous_state_dir=previous_state,
+                           next_state_dir=next_state,
+                           emulators_directory=s2_emulators_dir,
+                           forward_models=forward_model_list,
+                           output_directory=biophys_dir,
+                           state_mask=state_mask,
+                           roi=roi,
+                           spatial_resolution=spatial_resolution,
+                           roi_grid=roi_grid,
+                           destination_grid=destination_grid,
+                           with_profiling=False)
     print('Finished Inference of S2 data')
 
 

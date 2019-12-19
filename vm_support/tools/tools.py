@@ -336,7 +336,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-def Plot_PRIORS(roi_centroid, priors_directory_for_date, variables):
+def Plot_PRIORS(roi_centroid, priors_directory_for_date, variables, iband=1):
     # doystr = '125_*'
     tilestr_lat = '[%02.0f' % (np.floor(roi_centroid[1] / 10.) * 10.)
     tilestr_lon = '%03.0f' % (np.floor(roi_centroid[0] / 10.) * 10.)
@@ -350,14 +350,14 @@ def Plot_PRIORS(roi_centroid, priors_directory_for_date, variables):
         try:
             data_file = glob.glob(priors_directory_for_date + '/../user/Priors/*' + varname + '*.tiff')[0]
             data_set = gdal.Open(data_file)
-            data = data_set.GetRasterBand(1).ReadAsArray()[::100, ::100]
+            data = data_set.GetRasterBand(iband).ReadAsArray()[::100, ::100]
             source = 'UserDef'
 
         except:
             try:
                 data_file = glob.glob('/data/auxiliary/priors/Static/Vegetation/Priors/*' + varname + '*' + tilestr)[0]
                 data_set = gdal.Open(data_file)
-                data = data_set.GetRasterBand(1).ReadAsArray()[::100, ::100]
+                data = data_set.GetRasterBand(iband).ReadAsArray()[::100, ::100]
                 source = 'DefaultDatabase'
 
             except:

@@ -419,9 +419,9 @@ def Plot_Transformation(Data, Data_t):
 
 def Plot_TRAIT_evolution(Data_t, variable_of_interest):
     Nc = 4
-    Nr = Nc / len(Data_t) + 1
+    Nr = int(np.ceil(Nc / len(Data_t))) + 1
 
-    plt.figure(figsize=[20, 5 * Nr])
+    plt.figure(figsize=[20, len(Data_t) * Nr])
     for i in range(len(Data_t)):
         plt.subplot(Nr, Nc, i + 1)
         plt.imshow(Data_t[i], vmin=0, vmax=np.nanmax(np.array(Data_t)))

@@ -373,17 +373,13 @@ def Plot_PRIORS(roi_centroid, priors_directory_for_date, variables, iband=1):
             source = 'Not showing'
 
 
-def Plot_TRAITS(biophys_output, date: str, variables_subset):
+def Plot_TRAITS(biophys_output,date,variables_subset, str=''):
     # plot the variables,
     Nc = 2
     Nr = len(variables_subset) / Nc + 1
     plt.figure(figsize=[20, 20])
-    date = get_time_from_string(date)
     for i, variable_of_interest in enumerate(variables_subset):
-        file_name = "%s_%s.tif" % (variable_of_interest, date.strftime("A%Y%j"))
-        unc_file_name = "%s_%s_unc.tif" % (variable_of_interest, date.strftime("A%Y%j"))
-        data_file = set(glob.glob(biophys_output + '/' + file_name)) - \
-                    set(glob.glob(biophys_output + '/' + unc_file_name))
+        data_file = set(glob.glob(biophys_output + '/*' + variable_of_interest + '*' + date + str + '.*')) #- \
         # read data
         data = -99
         for filename in data_file:
@@ -391,16 +387,17 @@ def Plot_TRAITS(biophys_output, date: str, variables_subset):
             data = data_set.ReadAsArray(0)
 
         # post process data
-        data = InvTransformation(variable_of_interest, data)
+        if str == '':
+            data = InvTransformation(variable_of_interest, data)
         data[data < 1e-5] = np.NaN
         data[data > 1e9] = np.NaN
 
         # plot data
-        plt.subplot(Nr, Nc, i + 1)
+        plt.subplot(Nr, Nc, i +1)
         plt.imshow(data)
         plt.colorbar()
         plt.title(variable_of_interest + ' [%2.2e' % np.nanmean(data) + ' - %2.2e]' % np.nanstd(data))
-    plt.savefig('Traits-retrieved.png')
+    plt.savefig('Traits-retrieved'+str+'.png')
 
 
 def Plot_Transformation(Data, Data_t):

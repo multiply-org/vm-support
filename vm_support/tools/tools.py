@@ -425,3 +425,55 @@ def Plot_TRAIT_evolution(Data_t, variable_of_interest):
         plt.title(variable_of_interest)
         plt.colorbar(orientation='horizontal', fraction=.1)
     plt.savefig('Temporal Evolution of Retrieved ' + variable_of_interest + '.png')
+
+
+def Read_TraitPriors2(directory, variables, date, str=''):
+    Data = []
+    for i, varname in enumerate(variables):
+        filestr = directory + '/' + varname + '*' + date + str + '.tif'
+        data_file = glob.glob(filestr)[0]
+
+        data_set = gdal.Open(data_file)
+        data = data_set.GetRasterBand(1).ReadAsArray()[::, ::]
+        data[np.isnan(data)] = -999.
+
+        if len(data) > 0:
+            Data.append(data)
+    return Data
+
+
+def Classify_PRIORS3(directory, variables, date, rounding=0.01):
+    # read data on basis of  unique trait-combinations
+    Data = Read_TraitPriors2(directory, variables, date)
+    Data = np.array(Data)
+
+    # round down to values to the 2nd decimal place (to reduce nr of classes with similar values (>10% diff)
+    Data = np.round(Data / rounding) * rounding
+
+    # identify classes on basis of  unique trait-combinations
+    Nx, Ny, Nz = np.shape(Data)
+    classes_u = np.unique(np.reshape(Data, [Nx, Ny * Nz]), axis=1)
+
+    # Filter classes if they contain erroneous traits
+    Ierror = np.any(classes_u < 0, axis=0)
+    classes_u = classes_u[:, ~Ierror]
+
+    # Identify which pixels belong to which class
+    Nt, Nu = np.shape(classes_u)
+    Iclass = np.zeros((Ny, Nz)) - 99.
+    for u in range(Nu):
+        I = np.zeros((Ny, Nz)) + 1.
+        for t in range(Nt):
+            I = I * (Data[t, :, :] == classes_u[t, u])
+        Iclass[I > 0] = u
+
+    # estimate uncertainty for each class
+    Data_unc = Read_TraitPriors2(directory, variables, date, '_unc')
+    Data_unc = np.array(Data_unc)
+    classes_u_unc = classes_u * 0.
+    for t in range(Nt):
+        trait_unc = Data_unc[t, :, :]
+        for u in range(Nu):
+            classes_u_unc[t, u] = float(np.mean(trait_unc[Iclass == u]))
+
+    return Iclass, classes_u, classes_u_unc

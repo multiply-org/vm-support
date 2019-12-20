@@ -119,15 +119,3 @@
       parameters:
         path_to_json_file: /home/ubuntu/.multiply/mundi_store.json
       type: MundiMetaInfoProvider
-- DataStore:
-    FileSystem:
-      parameters:
-        path: /data/archive/
-        pattern: /dt/yy/mm/dd/
-        temp_dir: /data/temp/creodias/
-      type: CreoDiasFileSystem
-    Id: CreoDias
-    MetaInfoProvider:
-      parameters:
-        path_to_json_file: /home/ubuntu/.multiply/creodias_store.json
-      type: CreoDiasMetaInfoProvider

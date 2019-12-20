@@ -477,3 +477,41 @@ def Classify_PRIORS3(directory, variables, date, rounding=0.01):
             classes_u_unc[t, u] = float(np.mean(trait_unc[Iclass == u]))
 
     return Iclass, classes_u, classes_u_unc
+
+
+#### check if there is actual data in the SDRS files ############################################
+# if the files are corrupt/empty/... than it is renamed (so to not be taken into account in the inference..)
+def Check_SDRS_Files(sdrs_directory):
+    band_of_interest = '*sur'
+    subdir = sdrs_directory  # glob.glob(sdrs_directory + '/*')[0]
+    subdirs = glob.glob(subdir + '/*')
+
+    for iprod in range(len(subdirs)):
+        subdir = subdirs[iprod]
+        print(subdir)
+        data_files = set(glob.glob(subdir + '/' + band_of_interest + '*')) - \
+                     set(glob.glob(subdir + '/' + band_of_interest + '*unc*'))
+
+        try:
+            # test reading file
+            bandnr = 'B%02.0f*' % (1)
+            data_file = set(glob.glob(subdir + '/' + bandnr + band_of_interest + '*')) - \
+                        set(glob.glob(subdir + '/' + bandnr + band_of_interest + '*unc*'))
+            data_file = list(data_file)[0]
+            data_set = gdal.Open(data_file)
+            data = data_set.ReadAsArray(0) * 0.01
+
+            # check files on validity
+            val = 0
+            if (np.shape(data)[0] > 0) * (np.shape(data)[1] > 0):
+                val = 1
+            if len(np.unique(data)) > 10:
+                val = 1
+            else:
+                val = 0
+
+            # rename erroneous files
+            if val < 1:
+                os.replace(data_file, ('/').join(data_file.split('/')[:-1]) + '/E.tif')
+        except:
+            val = 0

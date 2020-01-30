@@ -14,7 +14,7 @@ if not os.path.exists('/mnt/multiply/data'):
     for device in devices:
         if os.path.exists(device):
             logging.info(f'Device found at {device}, trying to mount ...')
-            process = subprocess.run(['sudo', 'mount', device, '/mnt/multiply/'])
+            process = subprocess.run(['sudo', 'mount', '-t', 'ext4', device, '/mnt/multiply/'])
             logging.info(f'Mounting process ended with code {process.returncode}')
             if process.returncode == SUCCESS:
                 logging.info(f'Device {device} mounted.')
@@ -23,7 +23,7 @@ if not os.path.exists('/mnt/multiply/data'):
             elif process.returncode == MOUNT_FAILURE:
                 logging.info(f'Device {device} must be formatted.')
                 subprocess.run(['sudo', 'mkfs.ext4', device])
-                process = subprocess.run(['sudo', 'mount', device, '/mnt/multiply/'])
+                process = subprocess.run(['sudo', 'mount', '-t', 'ext4', device, '/mnt/multiply/'])
                 logging.info(f'Mounting process ended with code {process.returncode}')
                 if process.returncode == SUCCESS:
                     logging.info(f'Device {device} mounted.')

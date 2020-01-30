@@ -7,6 +7,7 @@ import subprocess
 
 if not os.path.exists('/mnt/multiply/data'):
     SUCCESS = 0
+    MOUNT_FAILURE = 32
     logging.getLogger().setLevel(logging.INFO)
     disk_mounted = False
     devices = ['/dev/vdb', '/dev/vdb1']
@@ -19,7 +20,7 @@ if not os.path.exists('/mnt/multiply/data'):
                 logging.info(f'Device {device} mounted.')
                 disk_mounted = True
                 break
-            else:
+            elif process.returncode == MOUNT_FAILURE:
                 logging.info(f'Device {device} must be formatted.')
                 subprocess.run(['sudo', 'mkfs.ext4', device])
                 process = subprocess.run(['sudo', 'mount', device, '/mnt/multiply/'])

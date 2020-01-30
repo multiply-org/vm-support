@@ -1,3 +1,9 @@
+## Version 0.2.1
+
+### Fixes
+- Fixed file structure construction script
+
+
 ## Version 0.2
 
 ### Improvements and Features

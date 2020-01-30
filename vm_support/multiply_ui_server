@@ -1,0 +1,51 @@
+#!/bin/sh
+# Dieses Skript gehoert nach /etc/init.d/ sowie als Link 
+# in die verschiedenen Runlevel-Directories.
+# Notwendige Anpassungen (Variablen) sind oben in der Datei 
+# vermerkt. Den INIT INFO Block bitte ebenso anpassen
+# 
+### BEGIN INIT INFO
+# Provides:          MULTIPLY UI Server
+# Required-Start:    networking
+# Required-Stop:     
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Start multiply ui server
+### END INIT INFO
+
+INSTANCE_NAME=multiply_ui_server
+
+CONDA_DIR=/software/miniconda
+
+RUN_AS=ubuntu
+
+ulimit -n 16384
+
+LOGFILE=/var/log/$INSTANCE_NAME.log
+
+. /lib/lsb/init-functions
+
+case "$1" in
+start)  
+	log_daemon_msg "Starting MULTIPLY UI Server $CONDA_DIR"
+	touch $LOGFILE
+	chown $RUN_AS $LOGFILE
+	su $RUN_AS -s /bin/bash -c "set -m;set -x;export PATH=$CONDA_DIR/bin:$PATH;. $CONDA_DIR/etc/profile.d/conda.sh;conda activate multiply-platform;nohup mui-server & echo \$! > /tmp/multiply_ui_server.pid" >>$LOGFILE 2>>$LOGFILE
+    log_end_msg $?
+	;;
+stop)
+	log_daemon_msg "Stopping MULTIPLY UI Server $CONDA_DIR"
+	su $RUN_AS -s /bin/sh -c "pid=\$(cat /tmp/multiply_ui_server.pid);kill \$pid" >>$LOGFILE 2>>$LOGFILE
+	sleep 1
+	;;
+restart)
+	$0 stop
+	$0 start
+	;;
+*)
+	echo "Usage: $0 {start|stop|restart}"
+	exit 1
+	;;
+esac
+
+

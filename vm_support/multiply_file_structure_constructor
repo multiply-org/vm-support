@@ -1,0 +1,54 @@
+#!/bin/sh
+# Dieses Skript gehoert nach /etc/init.d/ sowie als Link 
+# in die verschiedenen Runlevel-Directories.
+# Notwendige Anpassungen (Variablen) sind oben in der Datei 
+# vermerkt. Den INIT INFO Block bitte ebenso anpassen
+# 
+### BEGIN INIT INFO
+# Provides:          File Structure Construction for MULTIPLY
+# Required-Start:    networking
+# Required-Stop:     
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Creates the file structure required by the MULTIPLY platform
+### END INIT INFO
+
+INSTANCE_NAME=multiply_file_structure_constructor
+
+CONDA_DIR=/software/miniconda
+
+SETUP_SCRIPT_FILE=/software/vm-support/vm_support/file_structure_constructor.py
+
+RUN_AS=ubuntu
+
+ulimit -n 16384
+
+
+LOGFILE=/var/log/$INSTANCE_NAME.log
+
+. /lib/lsb/init-functions
+
+case "$1" in
+start)  
+	log_daemon_msg "Setting up file structure of MULTIPLY platform"
+
+	touch $LOGFILE
+	chown $RUN_AS $LOGFILE
+	su $RUN_AS -s /bin/bash -c "set -m;set -x;export PATH=$CONDA_DIR/bin:$PATH;. $CONDA_DIR/etc/profile.d/conda.sh;conda activate multiply-platform;python $SETUP_SCRIPT_FILE" >>$LOGFILE 2>>$LOGFILE
+    log_end_msg $?
+	;;
+stop)   
+	log_daemon_msg "Nothing to stop"
+	sleep 1
+	;;
+restart)
+	$0 stop
+	$0 start
+	;;
+*)
+	echo "Usage: $0 {start|stop|restart}"
+	exit 1
+	;;
+esac
+
+

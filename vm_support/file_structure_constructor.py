@@ -61,7 +61,7 @@ if not os.path.exists('/data/'):
         subprocess.run(['sudo', '-S', 'chown', 'ubuntu', '/data/working_dirs/'], stdin=pass_command.stdout)
     # place bucket info files in folders
     logging.info('Placing bucket placeholders ...')
-    bucket_info_files = glob.glob('./bucket_info_files/*json')
+    bucket_info_files = glob.glob('/home/ubuntu/bucket_info_files/*json')
     for path_to_bucket_info_file in bucket_info_files:
         with open(path_to_bucket_info_file, "r") as bucket_info_file:
             bucket_info = json.load(bucket_info_file)

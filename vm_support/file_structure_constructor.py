@@ -14,7 +14,7 @@ if not os.path.exists('/mnt/multiply/data'):
     for device in devices:
         if os.path.exists(device):
             logging.info(f'Device found at {device}, trying to mount ...')
-            process = subprocess.run(['sudo', 'mount', '-t', 'ext4', device, '/mnt/multiply/'])
+            process = subprocess.run(['echo', "'multiply'", '|', 'sudo', '-S', 'mount', '-t', 'ext4', device, '/mnt/multiply/'])
             logging.info(f'Mounting process ended with code {process.returncode}')
             if process.returncode == SUCCESS:
                 logging.info(f'Device {device} mounted.')
@@ -22,8 +22,8 @@ if not os.path.exists('/mnt/multiply/data'):
                 break
             elif process.returncode == MOUNT_FAILURE:
                 logging.info(f'Device {device} must be formatted.')
-                subprocess.run(['sudo', 'mkfs.ext4', device])
-                process = subprocess.run(['sudo', 'mount', '-t', 'ext4', device, '/mnt/multiply/'])
+                subprocess.run(['echo', "'multiply'", '|', 'sudo', '-S', 'mkfs.ext4', device])
+                process = subprocess.run(['echo', "'multiply'", '|', 'sudo', '-S', 'mount', '-t', 'ext4', device, '/mnt/multiply/'])
                 logging.info(f'Mounting process ended with code {process.returncode}')
                 if process.returncode == SUCCESS:
                     logging.info(f'Device {device} mounted.')
@@ -31,14 +31,14 @@ if not os.path.exists('/mnt/multiply/data'):
                     break
 if not os.path.exists('/data/'):
     logging.info('Creating data folder structure ...')
-    subprocess.run(['sudo', 'mkdir', '/data/'])
-    subprocess.run(['sudo', 'chown', 'ubuntu', '/data/'])
+    subprocess.run(['echo', "'multiply'", '|', 'sudo', '-S', 'mkdir', '/data/'])
+    subprocess.run(['echo', "'multiply'", '|', 'sudo', '-S', 'chown', 'ubuntu', '/data/'])
     subprocess.run(['chmod', '777', '/data/'])
     if disk_mounted:
         # create data folders on mount
-        subprocess.run(['sudo', 'mkdir', '/mnt/multiply/data/'])
-        subprocess.run(['sudo', 'chown', 'ubuntu', '/mnt/multiply/data/'])
-        subprocess.run(['sudo', 'chmod', '777', '/mnt/multiply/data/'])
+        subprocess.run(['echo', "'multiply'", '|', 'sudo', '-S', 'mkdir', '/mnt/multiply/data/'])
+        subprocess.run(['echo', "'multiply'", '|', 'sudo', '-S', 'chown', 'ubuntu', '/mnt/multiply/data/'])
+        subprocess.run(['echo', "'multiply'", '|', 'sudo', '-S', 'chmod', '777', '/mnt/multiply/data/'])
         os.makedirs('/mnt/multiply/data/archive')
         os.makedirs('/mnt/multiply/data/auxiliary')
         os.makedirs('/mnt/multiply/data/temp')
@@ -50,14 +50,14 @@ if not os.path.exists('/data/'):
         subprocess.run(['ln', '-s', '/mnt/multiply/data/working_dirs', '/data/working_dirs'])
     else:
         # just create data folders
-        subprocess.run(['sudo', 'mkdir', '/data/archive/'])
-        subprocess.run(['sudo', 'mkdir', '/data/auxiliary/'])
-        subprocess.run(['sudo', 'mkdir', '/data/temp/'])
-        subprocess.run(['sudo', 'mkdir', '/data/working_dirs/'])
-        subprocess.run(['sudo', 'chown', 'ubuntu', '/data/archive/'])
-        subprocess.run(['sudo', 'chown', 'ubuntu', '/data/auxiliary/'])
-        subprocess.run(['sudo', 'chown', 'ubuntu', '/data/temp/'])
-        subprocess.run(['sudo', 'chown', 'ubuntu', '/data/working_dirs/'])
+        subprocess.run(['echo', "'multiply'", '|', 'sudo', '-S', 'mkdir', '/data/archive/'])
+        subprocess.run(['echo', "'multiply'", '|', 'sudo', '-S', 'mkdir', '/data/auxiliary/'])
+        subprocess.run(['echo', "'multiply'", '|', 'sudo', '-S', 'mkdir', '/data/temp/'])
+        subprocess.run(['echo', "'multiply'", '|', 'sudo', '-S', 'mkdir', '/data/working_dirs/'])
+        subprocess.run(['echo', "'multiply'", '|', 'sudo', '-S', 'chown', 'ubuntu', '/data/archive/'])
+        subprocess.run(['echo', "'multiply'", '|', 'sudo', '-S', 'chown', 'ubuntu', '/data/auxiliary/'])
+        subprocess.run(['echo', "'multiply'", '|', 'sudo', '-S', 'chown', 'ubuntu', '/data/temp/'])
+        subprocess.run(['echo', "'multiply'", '|', 'sudo', '-S', 'chown', 'ubuntu', '/data/working_dirs/'])
     # place bucket info files in folders
     logging.info('Placing bucket placeholders ...')
     bucket_info_files = glob.glob('./bucket_info_files/*json')

@@ -1,8 +1,17 @@
-## Version 0.2.1
+## Version 0.2.2
+
+### Fixes
+- Fixed file structure construction script
+- Use MUNDI Aux Data Provider
+
 
 ### Fixes
 - Fixed file structure construction script
 
+## Version 0.2.1
+
+### Fixes
+- Fixed file structure construction script
 
 ## Version 0.2
 

@@ -129,74 +129,231 @@ body.custom-background { background-color: #d3d3d3; }
 	</header><!-- .entry-header -->
 
 	<div class="entry-content">
-		<p style="text-align: left;"><strong><span style="font-size: x-large;">How to create a MULTIPLY VM? (draft)</span></strong></p>
+		<p style="text-align: left;"><strong><span style="font-size: x-large;">How to create and use a MULTIPLY VM</span></strong></p>
 
                 <p style="text-align: left;"><span style="font-size: medium;">
-					The MULTIscale SENTINEL land surface information retrieval Platform (MULTIPLY) provides a VM with
-					Jupyter notebooks and data processors you can work with.
+					The MULTIscale SENTINEL land surface information retrieval Platform (MULTIPLY) allows to derive
+					biophysical land parameters such as Leaf Area Index (LAI) or Soil Moisture.
+					Users may determine a spatial region of interest and the resolution of this region,
+					but also a start time, an end time, and time steps between these.
+					The results will be derived using forward models that operate on EO Data from the Sentinel Missions.
+					Users also have the option to specify which forward models they want to useor to
+					apply post-processors to derive additional indicators.
+					<br/>
 					You need a Mundi account to launch your personal MULTIPLY VM on Mundi and use it from the browser
 					of your local machine.
-					On Mundi your VM accesses available Sentinel data directly avoiding download.
+					On Mundi, your VM accesses available Sentinel data directly avoiding download to your local PC.
 				</span></p>
 
 <h3>1. Create your Mundi account</h3>
                   
-		You need to register with Mundi and sign a contract to become user of the cloud infrastructure of Mundi
+		You need to register with Mundi and sign a contract to become a user of the cloud infrastructure of Mundi
 		with access to Sentinel data.
 		The cloud provider of Mundi is OTC.
-		The use of cloud resources is linked to costs.
-
-<a href="https://mundiwebservices.com/">https://mundiwebservices.com/</a><br/>
-<a href="https://mundiwebservices.com/">https://mundiwebservices.com/offer</a><br/>
-<a href="https://mundiwebservices.com/">https://mundiwebservices.com/contact</a>
+		Note that the use of cloud resources is linked to costs, depending on your actual usage.
+		See the following links for more information:
+<ul>
+	<li><a href="https://mundiwebservices.com/">https://mundiwebservices.com/</a><br/></li>
+	<li><a href="https://mundiwebservices.com/">https://mundiwebservices.com/offer</a><br/></li>
+	<li><a href="https://mundiwebservices.com/">https://mundiwebservices.com/contact</a></li>
+</ul>
 
 <h3>2. Create your Multiply VM</h3>
 
-		The Multiply VM (instance) is based on a prepared Multiply Image (template).
-		Depending on the Mundi policy you may either find the image among the public images, or you can download
-		the image file from <a href="https://multiply.obs-website.eu-de.otc.t-systems.com/images/multiply1-20191215.vdi">https://multiply.obs-website.eu-de.otc.t-systems.com/images/multiply1-20191215.vdi</a> (9 GB)
-		and create an image from it in your account.
-		The VM is created from the image using the following steps:
+		The MULTIPLY VM (instance) is based on a prepared MULTIPLY image, which is provided as a image file.
+		To create the VM, you must first turn the publicly available image file into a private image of your tenant.
+		Afterwards, you can use this image to create Virtual Machines.
+		<h4>2.1 Create a private image</h4>
+		The necessary steps to do this are listed below:
+		<ul>
+			<li>First, You need to download the image file from <a href="https://multiply.obs-website.eu-de.otc.t-systems.com/images/multiply1-20190303.vdi">https://multiply.obs-website.eu-de.otc.t-systems.com/images/multiply1-20190303.vdi</a> (13.3 GB).
+			You may find it most convenient to download the image using the sc3cmd tool,
+			which is useful for several purposes when working with the OTC.
+			See  <a href="https://docs.otc.t-systems.com/ugs3cmd/obs/en-us_topic_0051518473.html">here</a> for more
+			information on how to use this tool with the OTC or <a href="https://s3tools.org/s3cmd">here</a>
+			for download instructions.
+			If you work on linux, you can simpyl install with <i>sudo apt-get install s3cmd</i>.
+			Use <i>s3cmd --configure</i> to set up your account for S3 access.
+			After the configuration, you can download the image file with
+				<i>s3cmd get s3://multiply/images/multiply1-20191215.vdi</i></li>
+			<li>Create your own bucket. You can do this with <i>s3cmd mb s3://mybucketname</i></li>
+			<li>Upload the image to your own bucket with <i>s3cmd put multiply1-20200303.vdi s3://mybucketname/images/multiply1-20200303.vdi</i></li>
+			<li>Use the Image Management service to create your private image from the file.
+				<ul>
+					<li>Login into your account at <a href="https://auth.otc.t-systems.com/authui/login.action?service=https://console.otc.t-systems.com/ecm/#/login">https://auth.otc.t-systems.com/authui/login.action?service=https://console.otc.t-systems.com/ecm/#/login</a> .</li>
+					<li>Select <i>IMS</i></li>
+					<li>Select <i>Create Image</i></li>
+					<li>Select <i>Image File</i> as source</li>
+					<li>Select the .vdi file in your bucket</li>
+					<li>Check <i>Enable automatic configuration</i>></li>
+					<li>Set the system disk to 30 GB.</li>
+					<li>Choose a name for your image.</li>
+					<li>Press <i>Create now</i></li>
+					Please note that it is not possible to add a data disk at this point.
+				</ul>
+			</li>
+		</ul>
+		<h4>2.2 Create a Virtual Machine</h4>
+		Now you can actually create a VM from your private Image.
+		Assuming you are still logged in into your OTC account:
+		<ul>
+			<li>Select <i>Elastic Cloud Server (ECS)</i> in the main window</li>
+			<li>Select <i>Create ECS</i> (in the upper right)</li>
+	  		<li>Select a flavor.
+				We recommend to use at the very least 8 cores and 16 GB, but encourage you to use more.</li>
+	  		<li>Select your private image with a system disk of at least 30 GB.
+				The image cannot be created if you select less.</li>
+			<li>Add a data disk.
+				This step is optional, but recommended.
+				If you do not add a data disk, you should choose a large size for your system disk.
+				How big your disk needs to be is mostly up to your application,
+				but we recommend to choose at the very least 100GB.
+			</li>
+			<li>Select your default network and let the OTC choose the internal IP.</li>
+			<li>Use the default security group initially (you may modify this and create a more restricted one
+				with access only from your local network)</li>
+			<li>Assign an external IP (EIP)</li>
+			<li>Choose a name for your VM.</li>
+			<li>Either select an existing key pair or create a new one.
+				If you need to create a new one, store the private key on your local machine,
+				and protect the file against reading by anyone except your local user.</li>
+			<li>Confirm</li>
+  		</ul>
 
-<ul>
-  <li>Login into your account at <a href="https://auth.otc.t-systems.com/authui/login.action?service=https://console.otc.t-systems.com/ecm/#/login">https://auth.otc.t-systems.com/authui/login.action?service=https://console.otc.t-systems.com/ecm/#/login</a> .</li>
-  <li>Select Elastic Cloud Server (ECS), Create ECS (in the upper right), select flavor s2.large.4 (2 cores, 8 GB),
-	  select image multiply1-20191215 with a system disk of 30 GB, add a data disk of 200 GB.</li>
-  <li>Select your default network and let the OTC choose the internal IP, use the default security group initially
-	  (you may modify this and create a more restricted one with access only from your local network),
-	  and assign an external IP (EIP).</li>
-  <li>Set the ECS name to e.g. mymultiplyvm, and create a key pair (unless you have one already) and select it,
-	  store the private key on your local machine,
-	  and protect the file against reading by anyone except your local user.</li>
-  <li>Confirm, wait for the VM to be created
-</ul>
+<h3>3. Using the VM</h3>
+		You can start and stop the Virtual Machine in the ECS section of your OTC account
+		(Do not forget to stop and maybe delete the VM when it is not used to save costs).
+		When the VM is running, the MULTIPLY User Interface is available at <i>http://yourEIP:8888/</i> .
+		It is provided in the form of a Jupyter Lab.
+		Juypter Lab provides an environment that allows to work on multiple Jupyter Notebooks simultaneously,
+		but also to open terminals to access the system beneath or use the command line.
+		The UI provides you with a set of pre-configured notebooks,
+		but you may also create your own notebook or use the command line if you like.
+		<img src="images/Initial_view.png">
+		The access to the MULTIPLY User Interface is established via the <i>multiply_ui</i> – module.
+		Therefore, in most notebooks you will find as fist line <i>from multiply_ui.ui import mui</i>.
+		From this mui-module, properties can be derived and interaction forms can be brought up.
+		<br/>
+		The function of the User Interface is explained in the following four notebooks:
+		<ul>
+			<li>
+				<h4>MULTIPLY Authentication</h4>
+				This notebook serves to set credentials to download MODIS data from the NASA Earth Science Data Servers
+				and to access the EO Data provided by MUNDI.
+				These credentials will be served permanently, so you will only have to set them once.
+				<img src="images/Authentication.png">
+				Note that it may be necessary to restart Notebook kernels in order for these settings to have an effect.
+				In particular, forward models cannot be found when no valid MUNDI authentication is set
+			</li>
+			<li>
+				<h4>MULTIPLY Information</h4>
+				This notebook shows the general capability of the MULTIPLY platform. It lists
+				<ul>
+					<li>which variables can be computed</li>
+					<li>which forward models can be applied</li>
+					<li>on which input data the platform can perform</li>
+					<li>which post processors are available</li>
+					<li>which indicators can be derived from these post processors</li>
+				</ul>
+			</li>
+			<li>
+				<h4>MULTIPLY Processing</h4>
+				This is a notebook that can serve to configure, start, and monitor multiple processes.
+				In particular, <i>mui.sel_params()</i> brings up the form to configure a process.
+				At the top of the form, you can specify the parameters you want to derive and which forward models
+				you want to use for this.
+				The UI will detect and recommend valid combinations.
+				<img src="images/Variable_config.png">
+				Below, you can set options for pre-processing.
+				The availability of this depends on whether the selected forward models
+				require the data of the respective input type.
+				<img src="images/Pre_Process_Options.png">
+				Next, you may choose to set prior estimates for variables that form the input for your forward model.
+				You do not need to set these.
+				If you do not set these, they will be estimated from the internal MULTIPLY Prior Engine.
+				<img src="images/User_Priors.png">
+				Next, you can define the time period you are interested in.
+				With the parameter <i>Time Steps</i>, you can define the temporal granularity of your result.
+				For each time step, you will receive an image.
+				Note that the days are fully inclusive, so the configuration as given in the example below will
+				consist of six days and two time periods (from May 10th to May 14th and from May 14th to May 15th).
+				<img src="images/Time_Period.png">
+                Now you can set your Region of Interest.
+                You can do this be either pasting a WKT-String into the text field and clicking <i>Map region</i>
+                or by drawing a rectangle on the map.
+                You can also specify the resolution in m that the output grid shall have.
+				<img src="images/ROI.png">
+                Finally you can choose to apply a post processor.
+                You do so by selecting an indicator that you are interested in,
+                the respective post processor will automatically be selected.
+                <img src="images/Post_Processing.png">
+                Now you can set a name for the request/job and choose a python identifier.
+                Whether what you get is a request or a job will depend on which button you click:
+                With <i>New Request</i> you will create a request.
+                This will allow you to see what input data will be used during the process.
+                If you don't want to see this first and start the processing right away,
+                you can click <i>Submit request</i>.
+                In both cases, a Python object is created that you can address in the Notebook by the identifier
+                that you just set.
+                <img src="images/Request_Name.png">
+                Here is an example for a created request.
+                Note that it lists all input products that will be used.
+                <img src="images/Request.png">
+                If you create a job and type in the Python identifier,
+                you will get a static view of the processing state.
+                The job is broken down into smaller processing steps, named tasks, which might run simultaneously or
+                need to wait until a previous task has been completed.
+                The view also shows the progess (on a scale from 0 to 100) and the status ot the task.
+                <img src="images/Job.png">
+                As now you have created the job, you can also monitor it with
+                <i>mui.obs_job('identifier_of_your_job')</i>.
+                This view has the advantage that it updates automatically.
+                At the top, you see a <i>Cancel</i> button which gives you the option to cancel the job.
+                At the right end of each task row, you have button with a down-pointing arrow, which, if you click it,
+                gives you more details about the processing state of a task.
+                <img src="images/Obs_Job.png">
+                Alternatively, if you have multiple jobs running, you can view them via <i>mui.obs_jobs()</i>.
+                <img src="images/Obs_Jobs.png">
+                Finally, after processing has finished, you can choose to view your results.
+                Execute <i>mui.visualize('identifier_of_your_job')</i>.
+                A link will pop up which will direct you to the MULTIPLY Visualization Server.
+                Here, you can investigate your results and their uncertainty.
+                <img src="images/MULTIPLY_Visualization.png">
+			</li>
+            <li>
+                <h4>MULTIPLY Cleaning</h4>
+                This notebook aids you in keeping your data disk clean by allowing to clear caches, working directories,
+                or the archive with the data that has been used for processing.
+            </li>
+		</ul>
+        There is also one more Jupyter Notebook (mui-demo) which guides through these steps, and a Notebook named
+        <i>MULTIPLY SAR Data Access and Pre-Processing</i>, which goes into detail about the Pre-Processing of SAR data,
+        which is required when using a forward model that operates on Sentinel-1 Data.
+        This part is encapsulated into the process orchestration and does not need to be triggered by a user explicitly.
+        <br/>
+        Finally, there are two more Notebooks (<i>The_MULTIPLY_framework_v2.1</i> and
+        <i>The_MULTIPLY_framework_v2.1_vJoris_NSO-PFTsegmentedPriors_20191204</i>) which in detail explain the concepts
+        of the MULTIPLY framework.
+        These Notebooks are intended for expert users, but might help you in understanding the function of the platform
+        and the tasks that are carried out in the background.
 
-If the image is not offered as a public image you can do the following to create your private image:
+<h3>4. Extending the Platform</h3>
 
-<ul>
-  <li>Create a simple Ubuntu VM on the OTC with at least 10 GB free disk space.</li>
-  <li>Install s3cmd (sudo apt install s3cmd). Use s3cmd --configure to set up your account for S3 access.</li>
-  <li>Copy the Multiply image file with s3cmd get s3://multiply/images/multiply1-20191215.vdi</li>
-  <li>Create your own bucket and copy the image file into it with s3cmd mb s3://mybucketname;
-	  s3cmd put multiply1-20191215.vdi s3://mybucketname/images/multiply1-20191215.vdi</li>
-  <li>Use the Image Management service to create your private image from the file.
-	  Select IMS, create image, select source 'image file', select the .vdi file in your bucket,
-	  make sure you check 'Enable automatic configuration',
-	  set the system disk to 30 GB, set name to multiply1-currentdate, press 'create now'</li>
-</ul>
+        MULTIPLY has been developed as Python-based Open Source Software under the GPL License.
+        The code is available in the GitHub repository
+        <a href=https://github.com/multiply-org>https://github.com/multiply-org</a>.
+        It makes ample use of Python's Plugin functions.
+        In particular, you are enabled to plug in new data stores to access data, new post processors, new variables,
+        and new forward models.
+        For more information on how to extend MULTIPLY and how to use the code base, see the documentation:
+        <a href=https://multiply.readthedocs.io>https://multiply.readthedocs.io</a>.
 
-<h3>3. Configure and use the VM</h3>
+<h3>5. Contact</h3>
 
-<ul>
-  <li>Login at the VM from your local machine with ssh -i <yourprivatekeyfile> multiply@<yourEIP> ,
-	  e.g. ssh -i multiply_key.priv multiply@80.158.17.186 .</li>
-  <li>Start the Jupyter notebook server with nohup jupyter-lab ~/software/multiply-ui/notebooks > jupyter-lab.out &amp; </li>
-  <li>Start the ... service with ...</li>
-  <li>Access http://<yourEIP>:8888/ with your local browser</li>
-  <li>Find more information at <a href="https://multiply.readthedocs.io">https://multiply.readthedocs.io</a> .</li>
-</ul>
-
-Do not forget to stop and maybe delete the VM when it is not used to save costs.
+        In case you have any question about the MULTIPLY platform, you may contact:
+        <ul>
+            <li><a href=mundi@brockmann-consult.de>mundi@brockmann-consult.de</a> for technical matters</li>
+        </ul>
 
 <hr />
 <p><span style="font-size: small;"><img class="alignleft wp-image-288" src="images/EUlogo-150x150.jpg" alt="EUlogo" width="105" height="70"></span></p>

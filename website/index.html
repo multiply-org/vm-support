@@ -229,7 +229,7 @@ body.custom-background { background-color: #d3d3d3; }
 		but also to open terminals to access the system beneath or use the command line.
 		The UI provides you with a set of pre-configured notebooks,
 		but you may also create your own notebook or use the command line if you like.
-		<img src="images/Initial_view.png">
+		<img src="website_images/Initial_view.png">
 		The access to the MULTIPLY User Interface is established via the <i>multiply_ui</i> – module.
 		Therefore, in most notebooks you will find as fist line <i>from multiply_ui.ui import mui</i>.
 		From this mui-module, properties can be derived and interaction forms can be brought up.
@@ -241,7 +241,7 @@ body.custom-background { background-color: #d3d3d3; }
 				This notebook serves to set credentials to download MODIS data from the NASA Earth Science Data Servers
 				and to access the EO Data provided by MUNDI.
 				These credentials will be served permanently, so you will only have to set them once.
-				<img src="images/Authentication.png">
+				<img src="website_images/Authentication.png">
 				Note that it may be necessary to restart Notebook kernels in order for these settings to have an effect.
 				In particular, forward models cannot be found when no valid MUNDI authentication is set
 			</li>
@@ -263,30 +263,30 @@ body.custom-background { background-color: #d3d3d3; }
 				At the top of the form, you can specify the parameters you want to derive and which forward models
 				you want to use for this.
 				The UI will detect and recommend valid combinations.
-				<img src="images/Variable_config.png">
+				<img src="website_imagesVariable_config.png">
 				Below, you can set options for pre-processing.
 				The availability of this depends on whether the selected forward models
 				require the data of the respective input type.
-				<img src="images/Pre_Process_Options.png">
+				<img src="website_imagesPre_Process_Options.png">
 				Next, you may choose to set prior estimates for variables that form the input for your forward model.
 				You do not need to set these.
 				If you do not set these, they will be estimated from the internal MULTIPLY Prior Engine.
-				<img src="images/User_Priors.png">
+				<img src="website_imagesUser_Priors.png">
 				Next, you can define the time period you are interested in.
 				With the parameter <i>Time Steps</i>, you can define the temporal granularity of your result.
 				For each time step, you will receive an image.
 				Note that the days are fully inclusive, so the configuration as given in the example below will
 				consist of six days and two time periods (from May 10th to May 14th and from May 14th to May 15th).
-				<img src="images/Time_Period.png">
+				<img src="website_imagesTime_Period.png">
                 Now you can set your Region of Interest.
                 You can do this be either pasting a WKT-String into the text field and clicking <i>Map region</i>
                 or by drawing a rectangle on the map.
                 You can also specify the resolution in m that the output grid shall have.
-				<img src="images/ROI.png">
+				<img src="website_imagesROI.png">
                 Finally you can choose to apply a post processor.
                 You do so by selecting an indicator that you are interested in,
                 the respective post processor will automatically be selected.
-                <img src="images/Post_Processing.png">
+                <img src="website_imagesPost_Processing.png">
                 Now you can set a name for the request/job and choose a python identifier.
                 Whether what you get is a request or a job will depend on which button you click:
                 With <i>New Request</i> you will create a request.
@@ -295,30 +295,30 @@ body.custom-background { background-color: #d3d3d3; }
                 you can click <i>Submit request</i>.
                 In both cases, a Python object is created that you can address in the Notebook by the identifier
                 that you just set.
-                <img src="images/Request_Name.png">
+                <img src="website_imagesRequest_Name.png">
                 Here is an example for a created request.
                 Note that it lists all input products that will be used.
-                <img src="images/Request.png">
+                <img src="website_imagesRequest.png">
                 If you create a job and type in the Python identifier,
                 you will get a static view of the processing state.
                 The job is broken down into smaller processing steps, named tasks, which might run simultaneously or
                 need to wait until a previous task has been completed.
                 The view also shows the progess (on a scale from 0 to 100) and the status ot the task.
-                <img src="images/Job.png">
+                <img src="website_imagesJob.png">
                 As now you have created the job, you can also monitor it with
                 <i>mui.obs_job('identifier_of_your_job')</i>.
                 This view has the advantage that it updates automatically.
                 At the top, you see a <i>Cancel</i> button which gives you the option to cancel the job.
                 At the right end of each task row, you have button with a down-pointing arrow, which, if you click it,
                 gives you more details about the processing state of a task.
-                <img src="images/Obs_Job.png">
+                <img src="website_imagesObs_Job.png">
                 Alternatively, if you have multiple jobs running, you can view them via <i>mui.obs_jobs()</i>.
-                <img src="images/Obs_Jobs.png">
+                <img src="website_imagesObs_Jobs.png">
                 Finally, after processing has finished, you can choose to view your results.
                 Execute <i>mui.visualize('identifier_of_your_job')</i>.
                 A link will pop up which will direct you to the MULTIPLY Visualization Server.
                 Here, you can investigate your results and their uncertainty.
-                <img src="images/MULTIPLY_Visualization.png">
+                <img src="website_imagesMULTIPLY_Visualization.png">
 			</li>
             <li>
                 <h4>MULTIPLY Cleaning</h4>
@@ -356,7 +356,7 @@ body.custom-background { background-color: #d3d3d3; }
         </ul>
 
 <hr />
-<p><span style="font-size: small;"><img class="alignleft wp-image-288" src="images/EUlogo-150x150.jpg" alt="EUlogo" width="105" height="70"></span></p>
+<p><span style="font-size: small;"><img class="alignleft wp-image-288" src="website_imagesEUlogo-150x150.jpg" alt="EUlogo" width="105" height="70"></span></p>
 <p><span style="font-size: small;">This project has received funding from the European Union’s Horizon 2020 research
 	and innovation programme under grant agreement No 687320</span></p>
 <div style="clear:both;"></div>			</div><!-- .entry-content -->
